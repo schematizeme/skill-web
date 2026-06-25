@@ -1,0 +1,12 @@
+slug = "web"
+name = "schematize-web"
+tag = "Frontend · Next.js/Astro"
+status = "stable"
+order = 2
+current_version = "1.0.0"
+href = "/web"
+
+[descriptions]
+pt = "Padrões normativos de engenharia para frontends em Next.js e Astro."
+en = "Normative engineering standards for Next.js and Astro frontends."
+es = "Estándares normativos de ingeniería para frontends en Next.js y Astro."
