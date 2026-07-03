@@ -1,0 +1,89 @@
+# schematize-web — workflow de CI de referência (§43, §44, §45, §48, §35).
+# Copie para .github/workflows/ci.yml e ajuste <projeto>/comandos da sua stack
+# (Next.js ou Astro). Mobile primeiro; a11y e Core Web Vitals são GATE.
+name: ci
+on:
+  pull_request:
+  push: { branches: [main] }
+
+jobs:
+  standards-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Gate de padrões de frontend (DoD/§37) no diff
+        run: bash .claude/skills/schematize-web/scripts/check-diff.sh "origin/${{ github.base_ref || 'main' }}"
+      - name: Índice de componentes/hooks atualizado (§39)
+        run: |
+          node .claude/skills/schematize-web/scripts/build-index.mjs ./src > /tmp/idx.md || true
+          # compara com o commitado; descomente quando o índice estiver versionado:
+          # diff -q /tmp/idx.md <projeto>_archive/index/INDEX_COMPONENTS.md
+      - name: Scan de segredo no archive (§43/§28)
+        run: bash .claude/skills/schematize-web/scripts/archive-secret-scan.sh .
+
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 'lts/*', cache: 'npm' }
+      - run: npm ci
+      - name: Typecheck (TS strict — §40)
+        run: npx tsc --noEmit
+      - name: Lint (a11y + security + fronteiras — §44/§43)
+        run: npx eslint .
+      - name: Unit + componente (Testing Library — §48)
+        run: npm test -- --run
+      - name: Build (Next/Astro)
+        run: npm run build
+      - name: Gera sitemap (autogerado — §46)
+        run: node .claude/skills/schematize-web/scripts/gen-sitemap.mjs --base "${SITE_BASE_URL:-https://example.com}" --out ./out > ./out/sitemap.xml || true
+      - name: Smoke self-check (anti verde-mentiroso — §48)
+        run: bash .claude/skills/schematize-web/scripts/smoke-selfcheck.sh --self-check
+
+  e2e-a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 'lts/*', cache: 'npm' }
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - name: E2E (Playwright — fluxos críticos, §48)
+        run: npx playwright test
+      - name: A11y axe (GATE — §44; zero violação séria/crítica)
+        run: npm run test:a11y
+
+  lighthouse-cwv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 'lts/*', cache: 'npm' }
+      - run: npm ci && npm run build
+      - name: Lighthouse CI (GATE de Core Web Vitals + budgets — §45)
+        run: |
+          npm install -g @lhci/cli
+          # lighthouserc define assert: LCP<2500, total-blocking-time/INP, CLS<0.1,
+          # e resource budgets. Falha o job se estourar (não use --upload sem assert).
+          lhci autorun || (echo "Lighthouse/CWV fora do budget — bloqueia (§45)"; exit 1)
+
+  visual-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 'lts/*', cache: 'npm' }
+      - run: npm ci
+      - name: Regressão visual (telas-chave — §48)
+        run: npx playwright test --grep @visual
+
+  dep-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: npm audit (higiene de dependência — §43.7)
+        run: npm audit --audit-level=high || true
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
