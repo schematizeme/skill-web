@@ -3,6 +3,11 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.15.0] — 2026-08-21
+
+### Adicionado
+- **`observabilidade.md` §49.4 — a spec de consentimento**, que a `schematize-institutional` delegava a esta skill e não existia (o piso 2 dela era **inexequível por construção**). Dez pontos verificáveis: **nada não essencial antes da escolha** (*banner que aparece enquanto o pixel já disparou é teatro de conformidade*), aceitar e recusar com o **mesmo peso**, categorias (essencial é o que **quebra o site**, não o que o time gostaria), **registro auditável** (a LGPD exige **demonstrar** o consentimento — guarde o registro, não só o cookie), revogação que **apaga**, sem dark pattern, **categorias iguais às da política de cookies**, server-side obedecendo também, e o teste dos dois caminhos **provando na aba de rede**.
+
 ## [1.14.0] — 2026-08-21
 Saneamento do catálogo conforme a vistoria de 2026-08-21.
 
