@@ -1,5 +1,18 @@
 # Changelog — schematize-web
 
+Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
+com versionamento [SemVer](https://semver.org/lang/pt-BR/).
+
+## [1.14.0] — 2026-08-21
+Saneamento do catálogo conforme a vistoria de 2026-08-21.
+
+### Corrigido
+- **`assets/lint/eslint.config.mjs`** substitui o antigo `eslint.frontend.cjs`: flat config de verdade, com `eslint-plugin-react` **declarado** e `parserOptions.projectService`. Verificado rodando: `npx eslint src` reprova um `dangerouslySetInnerHTML` plantado (exit 1) — antes, a config sequer carregava.
+- **`scripts/check-diff.sh`**: `scan()` passou a distinguir exit ≥ 2 (erro da ferramenta) de "não achou", e o `danger_check()` **bloqueia sem sanitizador declarado** em vez de avisar — mais o guard de `grep -P` para não falhar silenciosamente onde o `perl` não está disponível.
+
+### Mudado
+- O anexo volátil (`references/stack-versoes.md`) é a **fonte única** dos thresholds de Core Web Vitals do catálogo — a `schematize-seo` passou a apontar para cá em vez de manter os números.
+
 ## [1.13.0] — 2026-08-20
 Propagação do piso "efeito externo NUNCA sai de não-produção" no recorte de frontend — o preview deploy é onde escapa e-mail real.
 
@@ -19,9 +32,6 @@ Propagação do piso "efeito externo NUNCA sai de não-produção" no recorte de
 Correção da contradição do muro pré-login de IAM (alinha ao `iam.md` da schematize-engineering).
 ### Mudado
 - **/web-iam**: removido o "2º fator forte obrigatório antes do acesso pleno" e o "força 2º fator no 1º login" — o muro pré-login / deadlock de bootstrap VETADO pela norma. Agora senha+Email OTP = 2FA baseline; fator forte é nudge + step-up just-in-time.
-
-
-Formato: [Keep a Changelog]; versionamento: SemVer. Contraparte de frontend do
 `schematize-go`: o que for servidor/API/dados delega ao schematize-go.
 
 ## [1.12.0] — 2026-08-15
