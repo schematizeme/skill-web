@@ -1,7 +1,8 @@
+<!-- cross-skill: operacao.md -> schematize-engineering -->
 # Operação e Deploy (frontend)
 
 > Parte da skill **schematize-web**. O equivalente front do `operacao.md` do
-> `schematize-go`: como o site vai pro ar e se mantém — alvos de deploy, cache de
+> `schematize-engineering`: como o site vai pro ar e se mantém — alvos de deploy, cache de
 > CDN, revalidação, env/segredos por ambiente, feature flags, rollback. Liga com
 > `seguranca.md` (headers/segredos), `performance.md` (cache/CWV) e `qualidade.md`
 > (DoD). O **fluxo de ambientes e o "nada direto no servidor/site"** (promoção

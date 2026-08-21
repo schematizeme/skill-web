@@ -1,3 +1,4 @@
+<!-- cross-skill: references/entrega.md -> schematize-engineering -->
 # Padrões de Código — limites, granularidade, comentários e MAPA
 
 Piso normativo de **organização do código**, válido para toda skill da casa

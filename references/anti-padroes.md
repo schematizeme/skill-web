@@ -1,6 +1,17 @@
 # Filosofia, Aplicação Universal e Anti-Padrões de Frontend (Macaquices)
 
-> Parte da skill **schematize-web**. Espelha a §0.1/§1/§37 do `schematize-go` no domínio do frontend. Itens **VETADO** são pisos: não admitem ADR de exceção.
+> **CITE ESTES ITENS PELO TÍTULO, NUNCA PELO NÚMERO.** A numeração é **local desta skill** e
+> **diverge entre as irmãs**: o mesmo `§37 item 45` é *"authz hand-rolled"* aqui, *"bloquear o
+> scheduler da BEAM"* na `schematize-elixir` e *"dois serviços no mesmo user Linux"* na
+> `schematize-ruby`; o item 49 é *"efeito externo real fora de prd"* na base, não existe em três
+> skills e é *"ReleaseFast sem profiling"* na `schematize-zig`. Os máximos vão de 46 a 53. Um
+> ponteiro `§37 item N` cruzando skills aponta para outra coisa — e um dentro da própria skill
+> apodrece assim que alguém insere um item no meio (foi o que aconteceu com a citação a *"item 48"*
+> em `references/iam.md`, quando esta lista terminava no 46). **Forma correta:** §37, *"<título do
+> item>"*.
+
+
+> Parte da skill **schematize-web**. Espelha a §0.1/§1/§37 da `schematize-engineering` no domínio do frontend. Itens **VETADO** são pisos: não admitem ADR de exceção.
 
 ## Índice
 - 0. Como ler
@@ -71,7 +82,7 @@ Prioridades, em ordem de desempate:
    → Decisão de acesso é **server-side**; o front é UX (§43.6).
 
 5. **Confiar em `role`/`tenant_id`/`user_id` vindos de prop, query ou storage do cliente.**
-   → Derivar do token verificado no servidor (§43.6, §15 do schematize-go).
+   → Derivar do token verificado no servidor (§43.6, §15 da `schematize-engineering`).
 
 ### XSS e injeção no cliente
 
@@ -176,7 +187,7 @@ Prioridades, em ordem de desempate:
 ### Stack
 
 34. **Site novo em framework fora de Next.js/Astro sem ADR; ou tratar Node do front como justificativa pra back novo em Node.**
-    → Site é Next ou Astro (§40.1); back novo é Go/Rust no schematize-go. Node do front é frontend, só.
+    → Site é Next ou Astro (§40.1); back novo é Go/Rust no a skill de backend do projeto. Node do front é frontend, só.
 35. **Criar arquivos ou repos fora da pasta do projeto** (largar arquivos no root e depois **subir de diretório** — `cd ..`, `../` — pra criar repos fora; ou espalhar em `~`, `~/Documents`, `~/Downloads`, `/tmp`, Área de Trabalho).
     → App/site novo = **pasta dentro do workspace atual** (`./<projeto>_<contexto>/`). O agente não sai da pasta do projeto sem o usuário pedir (§40.1).
 

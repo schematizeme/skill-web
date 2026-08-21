@@ -19,7 +19,7 @@ combinando o checker determinístico com seu julgamento.
      colocado/prop drilling, data fetching sem loading/erro/vazio, `fetch` sem cleanup.
    - **§6/§39:** arquivo acima do teto (750/≈500 úteis) sem quebra, ou >300 úteis flagueado como dívida; componente/hook sem doc-comment (o quê + onde);
      índice atualizado no mesmo PR?
-   - **§40:** backend disfarçado no front? (delega ao schematize-go).
+   - **§40:** backend disfarçado no front? (delega à skill de backend do projeto).
    - **Padrões de UI (`references/ui-padroes.md`):** app-like sem app-shell/menu lateral (drawer no mobile); **largura fixa/quebrada ou scroll-x no body**; dado agregável sem gráfico (ou gráfico não-lazy/só-cor/sem estados); **date-picker/modal à mão quebrado** (foco vaza, sem `Esc`, body rola, não vira full-screen no mobile); **mobile não utilizável** (alvo <44px, affordance só-hover, tabela estoura, teclado cobre input). Cada um é achado.
 3. Produza um relatório com `BLOQUEIA` (viola piso/DoD) e `ATENÇÃO` (melhorar),
    citando arquivo:linha. Qualquer `BLOQUEIA` → a task **não está pronta** (§35).

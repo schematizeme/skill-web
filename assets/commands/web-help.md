@@ -21,4 +21,4 @@ instalados em `.claude/commands/`):
 
 Depois da tabela, diga em uma linha que o detalhe normativo está na skill
 `schematize-web` (referências em `references/`) e que o site é `skills.schematize.me/web`.
-Se a tarefa for de servidor/API/dados, lembre que isso é escopo do `schematize-go`.
+Se a tarefa for de servidor/API/dados, lembre que isso é escopo da skill de backend do projeto (a linguagem do rol escolhida por ADR).

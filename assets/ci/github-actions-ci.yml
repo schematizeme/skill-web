@@ -15,10 +15,12 @@ jobs:
       - name: Gate de padrões de frontend (DoD/§37) no diff
         run: bash .claude/skills/schematize-web/scripts/check-diff.sh "origin/${{ github.base_ref || 'main' }}"
       - name: Índice de componentes/hooks atualizado (§39)
-        run: |
-          node .claude/skills/schematize-web/scripts/build-index.mjs ./src > /tmp/idx.md || true
-          # compara com o commitado; descomente quando o índice estiver versionado:
-          # diff -q /tmp/idx.md <projeto>_archive/index/INDEX_COMPONENTS.md
+        env:
+          # Sem estes dois o gate NAO roda — e nao rodar REPROVA. Gate desarmado em silencio
+          # ("|| true" + diff comentado) foi o achado A5 da vistoria de 2026-08-21.
+          INDEX_SRC: ${{ vars.INDEX_SRC || './src' }}
+          INDEX_FILE: ${{ vars.INDEX_FILE }}
+        run: bash .claude/skills/schematize-web/scripts/check-index.sh
       - name: Scan de segredo no archive (§43/§28)
         run: bash .claude/skills/schematize-web/scripts/archive-secret-scan.sh .
 
@@ -38,7 +40,7 @@ jobs:
       - name: Build (Next/Astro)
         run: npm run build
       - name: Gera sitemap (autogerado — §46)
-        run: node .claude/skills/schematize-web/scripts/gen-sitemap.mjs --base "${SITE_BASE_URL:-https://example.com}" --out ./out > ./out/sitemap.xml || true
+        run: node .claude/skills/schematize-web/scripts/gen-sitemap.mjs --base "${SITE_BASE_URL:-https://example.com}" --out ./out > ./out/sitemap.xml
       - name: Smoke self-check (anti verde-mentiroso — §48)
         run: bash .claude/skills/schematize-web/scripts/smoke-selfcheck.sh --self-check
 
@@ -84,6 +86,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: npm audit (higiene de dependência — §43.7)
-        run: npm audit --audit-level=high || true
+        run: npm audit --audit-level=high
       - name: Gitleaks
         uses: gitleaks/gitleaks-action@v2

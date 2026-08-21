@@ -1,6 +1,6 @@
 # Observabilidade de Frontend
 
-> Parte da skill **schematize-web**. O front também precisa ser observável — erro de cliente, performance de campo e telemetria. Sem PII, sempre. O lado servidor de observabilidade (logs estruturados, tracing, métricas RED/USE) é do `schematize-go` (§16).
+> Parte da skill **schematize-web**. O front também precisa ser observável — erro de cliente, performance de campo e telemetria. Sem PII, sempre. O lado servidor de observabilidade (logs estruturados, tracing, métricas RED/USE) é da skill de backend do projeto (§16).
 
 ## Índice
 - 49. Observabilidade de Frontend
@@ -18,7 +18,7 @@
 
 **MUST**
 - **Capturar erro não tratado do cliente:** `window.onerror`, `unhandledrejection`, e **error boundaries** do framework (Next/React error boundary, página de erro do Astro) — pra que falha de UI vire **estado de erro projetado** (§42), não tela branca.
-- Erro reportado a uma ferramenta de monitoramento (Sentry ou equivalente) com **contexto útil**: rota, release/versão, navegador, e — quando existir — um `trace_id`/`correlation_id` propagado do servidor (liga com §16.3 do schematize-go) pra casar front e back no mesmo incidente.
+- Erro reportado a uma ferramenta de monitoramento (Sentry ou equivalente) com **contexto útil**: rota, release/versão, navegador, e — quando existir — um `trace_id`/`correlation_id` propagado do servidor (liga com §16.3 da `schematize-engineering`) pra casar front e back no mesmo incidente.
 - **Erro de hidratação é bug rastreável**, não ruído de console a ignorar.
 
 **VETADO**
@@ -37,7 +37,7 @@
 
 **MUST**
 - Telemetria/log do front é **estruturada** e **não carrega PII** (nome, e-mail, CPF, telefone), token, nem conteúdo de formulário. Mascarar na origem.
-- **VETADO** logar request/response inteiro, body de formulário ou storage "pra debugar" (§16.1 do schematize-go). Logue campos específicos, mascarados.
+- **VETADO** logar request/response inteiro, body de formulário ou storage "pra debugar" (§16.1 da `schematize-engineering`). Logue campos específicos, mascarados.
 
 ### 49.4 Privacidade e consentimento
 
@@ -48,7 +48,7 @@
 ### 49.5 Integração com a stack da casa (LGTM+)
 
 **MUST**
-- A telemetria de front integra a **mesma stack de observabilidade da casa** (§16 do `schematize-go`), pra front e back caírem no mesmo Grafana e casarem por `trace_id`:
+- A telemetria de front integra a **mesma stack de observabilidade da casa** (§16 da `schematize-engineering`), pra front e back caírem no mesmo Grafana e casarem por `trace_id`:
   - **RUM + erros:** **Grafana Faro** (Faro Web SDK) e/ou **OpenTelemetry-JS** no browser → **Grafana Alloy** (coletor) → **Tempo** (traces do usuário), **Loki** (logs/erros de cliente), **Prometheus/Mimir** (Web Vitals de campo como métrica).
   - **Propagação W3C Trace Context** do browser até o backend — um único trace ponta a ponta (front → BFF → serviço).
   - **Dashboards e alertas** de front (erro por rota/release, p75 de LCP/INP/CLS de campo, taxa de erro de hidratação) **versionados como código** no Grafana e entregues com o serviço; **Helm chart** quando o front tem runtime próprio (BFF/route handlers/adapter em container).

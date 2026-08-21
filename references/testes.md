@@ -1,6 +1,6 @@
 # Testes de Frontend — "Verde de Verdade"
 
-> Parte da skill **schematize-web**. Testa-se **comportamento, conteúdo, acessibilidade e velocidade** — não "renderizou". O fluxo de Q.A. plan-first (§48.7) espelha o do `schematize-go` (§22.9), adaptado às categorias de frontend.
+> Parte da skill **schematize-web**. Testa-se **comportamento, conteúdo, acessibilidade e velocidade** — não "renderizou". O fluxo de Q.A. plan-first (§48.7) espelha o da `schematize-qa` (`references/execucao.md` §1, *"Fluxo de Q.A. plan-first"*), adaptado às categorias de frontend.
 
 ## Índice
 - 48. Testes
@@ -65,13 +65,13 @@ Caminhos críticos (auth na UI, checkout, formulários que enviam dados, troca d
 
 ### 48.6 Smoke anti "verde mentiroso"
 
-Um smoke que só confere `200` é teatro: a rota responde, o conteúdo está quebrado, e o deploy passa. Para impedir (espelha §22.3 do schematize-go):
+Um smoke que só confere `200` é teatro: a rota responde, o conteúdo está quebrado, e o deploy passa. Para impedir (espelha a `schematize-qa` → `references/categorias.md` §5, *"Smoke — verde de verdade"*):
 
 **MUST**
 - **Assertar conteúdo do HTML servido**, não só status: a página tem o texto/elemento esperado (h1, herói, CTA), `<title>` e meta corretos, JSON-LD presente onde deve.
 - **Assertion negativa:** sem placeholder não renderizado (`{{`, `${`, `%s`), sem `undefined`/`null`/`NaN` no texto, **sem erro de hidratação** no console, sem stack trace na resposta.
 - **Self-check (meta-teste):** um caso que **força falha conhecida** (rota fake deve dar 404; uma asserção que deve falhar em modo `--self-check`) pra provar que o runner **sabe reportar FAIL**. Se o self-check "passa" quando deveria falhar, o smoke está cego → CI quebra.
-- **O runner tem que COLETAR seus testes:** o `include`/glob do vitest/jest cobre `*.test.tsx`/`*.test.ts` **nos diretórios onde você escreve** — um `.test.tsx` fora do glob **não roda e não avisa** (falso-verde silencioso: o componente "tem teste" que nunca executou). Asserte a **contagem esperada** e falhe em "no tests found" na pasta nova (espelha o red-first do schematize-engineering §22).
+- **O runner tem que COLETAR seus testes:** o `include`/glob do vitest/jest cobre `*.test.tsx`/`*.test.ts` **nos diretórios onde você escreve** — um `.test.tsx` fora do glob **não roda e não avisa** (falso-verde silencioso: o componente "tem teste" que nunca executou). Asserte a **contagem esperada** e falhe em "no tests found" na pasta nova (espelha o red-first da `schematize-qa` → `references/estrategia.md` §2).
 - **Guarda vista no vermelho:** todo teste novo foi confirmado **falhando** quando o comportamento quebra (red-first) — verde que nunca reprovou o caso ruim (a asserção casou com o vizinho) não guarda nada.
 - **CWV/budget no smoke pós-deploy:** página-chave aferida contra o budget (§45); lenta demais = FALHA. Sem `|| true`, sem swallow.
 
@@ -81,7 +81,7 @@ Use `scripts/smoke-selfcheck.sh` (bundlado) e os helpers de `scripts/lib.sh` (`a
 
 ### 48.7 Q.A. plan-first (aprovação obrigatória)
 
-A malha de Q.A. inclui passos potencialmente custosos/destrutivos (e2e contra ambiente, regeneração de baselines visuais, carga). Por isso **nenhuma submissão roda às cegas** — espelha §22.9 do schematize-go.
+A malha de Q.A. inclui passos potencialmente custosos/destrutivos (e2e contra ambiente, regeneração de baselines visuais, carga). Por isso **nenhuma submissão roda às cegas** — espelha a `schematize-qa`, `references/execucao.md` §1 (*"Fluxo de Q.A. plan-first (aprovação obrigatória)"*).
 
 **MUST — antes de executar**
 1. **Planejar tudo primeiro** (sem executar): quais modos (unit/componente/e2e/a11y/visual/smoke/CWV), ambiente alvo, páginas/fluxos afetados, ordem, dependências, passos que reescrevem baseline ou batem em serviço externo, e riscos.

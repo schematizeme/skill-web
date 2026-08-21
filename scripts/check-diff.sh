@@ -4,7 +4,7 @@
 # Sai 1 se achar qualquer violação de PISO; imprime achados com arquivo:linha.
 #
 # Cobre o que dá pra checar por regex/contagem. O julgamento fino (semântica de
-# auth client vs server, sanitização real, fronteira RSC) fica pro /schematize-review
+# auth client vs server, sanitização real, fronteira RSC) fica pro /web-review
 # com leitura humana/da IA. Falso-positivo se resolve com refator ou ADR — não
 # afrouxando o gate.
 
@@ -44,14 +44,32 @@ for f in "${FILES[@]}"; do
 done
 
 # 2) §37/§43/§44 — macaquices grep-áveis (padrão -> mensagem)
-scan() { # scan "regex" "mensagem"
-  local re="$1" msg="$2" hit
+# scan "regex" "mensagem" [--perl]
+#   Roda a regex sobre os arquivos do diff e BLOQUEIA em cada acerto.
+#   O `|| true` de antes engolia o exit 2 do grep (regex invalida / erro de I/O) e transformava
+#   ERRO DE REGEX EM VERDE — foi assim que o piso de `<img>` sem alt ficou morto desde que existe
+#   (A3/A3b da vistoria de 2026-08-21). Agora: 0 = achou, 1 = nao achou, >=2 = ERRO, e erro FALHA.
+scan() {
+  local re="$1" msg="$2" flavor="${3:-ere}" hit rc
+  local -a gflags
+  case "$flavor" in
+    --perl|perl) gflags=(-nP) ;;
+    *)           gflags=(-nE) ;;
+  esac
   for f in "${FILES[@]}"; do
     [[ -f "$f" ]] || continue
-    hit=$(grep -nE "$re" "$f" 2>/dev/null || true)
-    [[ -n "$hit" ]] && while IFS= read -r l; do block "$f:${l%%:*} — $msg"; done <<< "$hit"
+    hit=$(grep "${gflags[@]}" "$re" "$f" 2>/dev/null); rc=$?
+    if (( rc >= 2 )); then
+      block "scripts/check-diff.sh — grep saiu $rc na regra '"'"'$msg'"'"' (regex invalida ou arquivo ilegivel): $re"
+      continue
+    fi
+    (( rc == 0 )) && while IFS= read -r l; do block "$f:${l%%:*} — $msg"; done <<< "$hit"
   done
 }
+
+# has_perl_grep — `grep -P` existe nesta maquina? Sem ele, regra que exige lookahead NAO roda
+# em silencio; entao a ausencia vira BLOQUEIO explicito, nao um verde a menos.
+has_perl_grep() { echo x | grep -qP x 2>/dev/null; }
 
 # --- Segredo no cliente (§43.1) ---
 scan '(NEXT_PUBLIC_|VITE_|PUBLIC_|REACT_APP_)[A-Z0-9_]*(SECRET|PASSWORD|PRIVATE|SERVICE_ROLE)' \
@@ -65,7 +83,7 @@ scan '(localStorage|sessionStorage)\.(setItem|getItem)\(\s*[`"'\'']?(token|jwt|a
 
 # --- XSS (§43.4) ---
 scan 'dangerouslySetInnerHTML' \
-  'dangerouslySetInnerHTML — só com sanitizador allowlist; confirme em /schematize-review (§43.4/§37)'
+  'dangerouslySetInnerHTML — só com sanitizador allowlist; confirme em /web-review (§43.4/§37)'
 scan 'v-html=' 'v-html (Vue) — equivale a innerHTML cru, sanitize (§43.4/§37)'
 scan '\b(eval|Function)\s*\(|new\s+Function\s*\(' 'eval/new Function — proibido com input (§43.4/§37)'
 scan '\.innerHTML\s*=' 'atribuição direta a innerHTML — use textContent/sanitize (§43.4/§37)'
@@ -86,7 +104,11 @@ scan 'eslint-disable.*(jsx-a11y|security|no-danger)' \
 scan 'outline:\s*(none|0)\b|outline:\s*['\''"]none' \
   'outline:none remove foco visível — só com substituto equivalente (§44/§37)'
 scan 'tabindex=["'\'']?[1-9]' 'tabindex positivo quebra ordem de foco — use 0/-1 (§44/§37)'
-scan '<img(?![^>]*alt=)' 'img sem alt — toda imagem tem alt (vazio se decorativa) (§44/§37)'
+if has_perl_grep; then
+  scan '<img(?![^>]*alt=)' 'img sem alt — toda imagem tem alt (vazio se decorativa) (§44/§37)' --perl
+else
+  block "scripts/check-diff.sh — 'grep -P' indisponivel: a regra de <img> sem alt NAO pode rodar (POSIX ERE nao tem lookahead). Instale grep com PCRE."
+fi
 scan 'user-scalable\s*=\s*no|maximum-scale\s*=\s*1' 'viewport bloqueia zoom — VETADO p/ a11y (§44/§37)'
 
 # --- React/data fetching (§41/§42) ---

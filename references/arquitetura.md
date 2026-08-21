@@ -1,6 +1,6 @@
 # Arquitetura de Frontend: Fronteira Client/Server, Componentes, Estado e Data Fetching
 
-> Parte da skill **schematize-web**. Governa o **frontend**: fronteira client/server, composição de componentes, estado e busca de dados. Servidor de verdade, API, banco e infra de back **não** são deste skill — delegam ao `schematize-go`. Referências cruzadas (§N) apontam para seções do corpo do schematize-web.
+> Parte da skill **schematize-web**. Governa o **frontend**: fronteira client/server, composição de componentes, estado e busca de dados. Servidor de verdade, API, banco e infra de back **não** são deste skill — delegam à skill da linguagem de backend do projeto. Referências cruzadas (§N) apontam para seções do corpo do schematize-web.
 
 ## Índice
 - 40. Stack e Fronteira Client/Server
@@ -18,9 +18,9 @@
   - **Next.js** — app dinâmico, SSR, áreas autenticadas, App Router + React Server Components. É o default quando há interatividade rica e renderização no servidor.
   - **Astro** — site content-driven, marketing, docs, blog, conteúdo majoritariamente estático com ilhas de interatividade. É o default quando o alvo é HTML mínimo e velocidade máxima.
 - **TypeScript `strict` obrigatório** (ver `assets/lint/tsconfig.strict.json`). `any`, `@ts-ignore`, `@ts-nocheck` pra calar o compilador são VETADOS (§37).
-- **Node é 100% permitido — e só no frontend.** O server-side do próprio front (route handler, server action, middleware, BFF, adapter de Astro) é frontend e segue o §43 (segredo só server-side). Isso **não** reabre Node como backend de serviço — back de verdade é Go/Rust (`schematize-go`).
+- **Node é 100% permitido — e só no frontend.** O server-side do próprio front (route handler, server action, middleware, BFF, adapter de Astro) é frontend e segue o §43 (segredo só server-side). Isso **não** reabre Node como backend de serviço — back de verdade é Go/Rust (`schematize-engineering`).
 - Versões LTS correntes (Next/Astro/React/TS/Node) ficam em `references/stack-versoes.md` (Anexo A) — consulte lá, não decore.
-- **Nome do repositório:** mesma convenção da casa — `<projeto>_<contexto>[_<lang>]` em snake_case minúsculo, um repo por app/contexto. No frontend o `<contexto>` costuma ser `front`, `web`, `admin`, `site`; `_<lang>` opcional (`_ts`). Ex.: `loja_front`, `loja_admin_ts`. Detalhe em `schematize-go`/`schematize-rust` (§2).
+- **Nome do repositório:** mesma convenção da casa — `<projeto>_<contexto>[_<lang>]` em snake_case minúsculo, um repo por app/contexto. No frontend o `<contexto>` costuma ser `front`, `web`, `admin`, `site`; `_<lang>` opcional (`_ts`). Ex.: `loja_front`, `loja_admin_ts`. Detalhe em a skill da linguagem de backend do projeto (rol: `schematize-engineering`, `schematize-rust`, `schematize-elixir`, `schematize-csharp`, `schematize-zig`, `schematize-ruby`) (§2).
 - **Contenção no workspace (nunca sair da pasta do projeto):** o **diretório de projeto atual é o workspace**; todo app/site nasce e mora **dentro dele**. Vai criar um app novo? Crie uma **pasta pra ele dentro da pasta atual** (`./<projeto>_<contexto>/`) — **nunca** largue arquivos soltos no root pra depois **subir de diretório** (`cd ..`, `../`) e criar os outros repos fora. Repos são **irmãos dentro do mesmo workspace**, não espalhados pela máquina. **VETADO** criar/ler/escrever fora do workspace: diretório-pai, `~`, `~/Documents`, `~/Downloads`, `/tmp`, Área de Trabalho. O agente **não sai da pasta do projeto** — nem pra vasculhar, nem pra criar — a menos que o usuário peça explicitamente.
 
 **SHOULD**

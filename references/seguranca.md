@@ -1,6 +1,6 @@
 # Segurança de Frontend: Segredo, Sessão, Headers, XSS e Dependências
 
-> Parte da skill **schematize-web**. Piso de segurança do frontend, **herdado e alinhado ao `schematize-go`** (§13.4/§38 de lá). Onde o back e o front se tocam (BFF, server action, route handler), valem as duas skills. Referências cruzadas (§N) são do corpo do schematize-web.
+> Parte da skill **schematize-web**. Piso de segurança do frontend, **herdado e alinhado à base `schematize-engineering`** (§13.4/§38 de lá). Onde o back e o front se tocam (BFF, server action, route handler), valem as duas skills. Referências cruzadas (§N) são do corpo do schematize-web.
 
 ## Índice
 - 43. Segurança de Frontend
@@ -12,6 +12,7 @@
   - 43.6 Autenticação/autorização como UX (decisão é no servidor)
   - 43.7 Higiene de dependência e SRI
   - 43.8 Envio de e-mail e efeito externo (preview é NÃO-produção)
+  - 43.9 Quando a mesma tela roda FORA do browser: webview e Electron/Tauri
 
 ---
 
@@ -37,7 +38,7 @@
 **MUST**
 - **Token de sessão/auth em cookie `HttpOnly` + `Secure` + `SameSite=Lax|Strict`.** `HttpOnly` impede JS (e portanto XSS) de ler; `Secure` exige HTTPS; `SameSite` corta CSRF na maioria dos casos.
 - **`localStorage`/`sessionStorage` NUNCA guardam token/sessão.** Qualquer XSS lê todo o storage — token lá é token roubável. (VETADO — §37.)
-- Logout invalida a sessão **no servidor** (não basta apagar cookie no cliente). Refresh token, quando houver, é rotativo com detecção de reuso (§14 do schematize-go).
+- Logout invalida a sessão **no servidor** (não basta apagar cookie no cliente). Refresh token, quando houver, é rotativo com detecção de reuso (§14 da `schematize-engineering`).
 
 ### 43.3 Headers e CSP
 
@@ -74,7 +75,7 @@
 
 **MUST**
 - **Toda decisão de acesso é server-side.** `if (user.isAdmin)` no React **esconde** o botão (UX) — não **protege** o recurso. A rota/route handler/server action **re-verifica** a autorização no servidor a cada request.
-- `tenant_id`, role, `user_id` vêm do **token verificado no servidor**, nunca de prop, query, header ou body controlados pelo cliente (§15 do schematize-go).
+- `tenant_id`, role, `user_id` vêm do **token verificado no servidor**, nunca de prop, query, header ou body controlados pelo cliente (§15 da `schematize-engineering`).
 - Middleware de auth no front é conveniência de roteamento; o controle real está na borda do servidor que serve o dado.
 
 **VETADO**
@@ -84,7 +85,7 @@
 
 **MUST**
 - **`npm audit` (ou equivalente) no CI**, falhando em `high`/`critical` sem ADR de aceite. SCA + Dependabot/Renovate.
-- **Pin de versão** (lockfile commitado, sem range frouxo em dependência sensível). **Verificar nome** de toda dependência nova (typosquatting é real) e a licença (§13 do schematize-go: MIT/Apache-2.0/BSD/MPL-2.0/ISC ok; GPL/AGPL/SSPL/proprietária só com ADR).
+- **Pin de versão** (lockfile commitado, sem range frouxo em dependência sensível). **Verificar nome** de toda dependência nova (typosquatting é real) e a licença (§13 da `schematize-engineering`: MIT/Apache-2.0/BSD/MPL-2.0/ISC ok; GPL/AGPL/SSPL/proprietária só com ADR).
 - **SRI (`integrity` + `crossorigin`) em todo `<script>`/`<link>` de origem externa** (CDN). Sem SRI, um CDN comprometido injeta código no seu site.
 - Minimizar script de terceiro (analytics, tag manager, widgets) — cada um é superfície de ataque e custo de performance (§45). O que entrar, entra com CSP e, quando possível, carregado de forma diferida e isolada.
 
@@ -171,3 +172,37 @@ se reescreve aqui.
 servidor resolve **vazamento**; só o sink por default resolve **ENVIO**.
 
 > O front é a metade da aplicação que o atacante baixa inteira. Trate cada byte que vai pro cliente como público, cada input como hostil, e cada terceiro como um risco que você aceitou conscientemente.
+
+### 43.9 Quando a mesma tela roda FORA do browser: webview e Electron/Tauri
+
+O piso desta seção foi escrito para o sandbox do navegador. Quando a **mesma tela** é embarcada
+num cliente nativo, o sandbox muda — e o piso **não afrouxa; endurece**.
+
+**Webview de app nativo (`schematize-mobile`).** O app embute uma tela desta stack (checkout,
+onboarding, área logada). O que viaja junto, sem desconto:
+
+- **Token continua em cookie `HttpOnly`.** VETADO passar token pela **bridge JS** do webview, por
+  `postMessage`, por query string de deep link ou guardá-lo em `localStorage` "porque o app já
+  está autenticado". O webview é um browser com dono diferente, não uma zona confiável.
+- **Login NÃO acontece dentro do webview.** OAuth/OIDC de app público abre no **navegador do
+  sistema** (Custom Tabs / ASWebAuthenticationSession) e volta por Universal/App Link verificado —
+  a regra é da `schematize-mobile`, e esta skill renderiza o outro lado dela.
+- **CSP e `frame-ancestors` continuam valendo.** Um webview sem CSP é a mesma página sem CSP.
+- **Nada de `file://` com privilégio.** Conteúdo remoto não roda em origem local.
+
+**Electron/Tauri (`schematize-desktop`) — onde XSS vira RCE local.** No browser, uma injeção de
+HTML rouba sessão. Num cliente nativo com ponte para o sistema, a **mesma** injeção executa código
+na máquina do usuário: lê `~/.ssh`, escreve no autostart, chama `exec`. A diferença de severidade
+entre `dangerouslySetInnerHTML` no site e no app empacotado é **de categoria**, não de grau.
+
+- **Electron:** `contextIsolation: true` e `nodeIntegration: false` — sem exceção. A ponte é um
+  `contextBridge` com **allowlist explícita de funções**, nunca `ipcRenderer` exposto cru.
+- **Tauri:** allowlist mínima de comandos; nada de `shell.open` genérico nem `fs` com escopo amplo.
+- **CSP sem `unsafe-inline`/`unsafe-eval`** no app empacotado, e `will-navigate`/`new-window`
+  travados numa allowlist de origem.
+- **Segredo no bundle é segredo PUBLICADO.** O cliente nativo é distribuído: qualquer chave nele
+  está nas mãos de quem baixou. O piso 43.1 vale em dobro.
+- **Auto-update assinado** e a superfície de atualização é da `schematize-desktop`.
+
+> Regra de bolso: **se a tela pode ser embarcada, o piso é o do host mais perigoso** —
+> `schematize-desktop` > `schematize-mobile` > browser.

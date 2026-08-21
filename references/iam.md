@@ -3,7 +3,7 @@
 Recorte **frontend/cliente** do piso de IAM da casa. O padrão-mãe (agnóstico de
 linguagem, com o serviço de auth, motor ReBAC, sessão, migração) é
 `schematize-engineering/references/iam.md`; o backend (emissão/validação de token,
-JWKS, PDP/PEP) é `schematize-go`. Aqui trata-se do que o **navegador e o front de auth**
+JWKS, PDP/PEP) é a skill da linguagem de backend do projeto. Aqui trata-se do que o **navegador e o front de auth**
 fazem: o **front de auth próprio**, os **fluxos de login/2FA/passkey**, o **nudge de
 email secundário**, a **view de dispositivos** e o **logout irreversível** — sempre
 lembrando que **o cliente é UX; a decisão e o enforcement são server-side.**
@@ -210,7 +210,7 @@ login** (2 fatores ou processo com atraso + revisão), com feedback de rate-limi
 Toda checagem no navegador (esconder botão, bloquear rota no client router, validar
 formulário, `can()`/`isAdmin`) existe para **experiência**, não para segurança. **A
 decisão de autenticação e autorização, a validação de token, o rate-limit, o kill de
-sessão e a verificação de fator acontecem no servidor** (`schematize-go` / o serviço de
+sessão e a verificação de fator acontecem no servidor** (`schematize-engineering` / o serviço de
 auth). Um atacante controla o cliente por completo: pode pular o React router, forjar
 props, editar o bundle. Portanto **nenhum piso de segurança é satisfeito no front** — o
 front **conduz o fluxo**; o servidor **decide e impõe**.

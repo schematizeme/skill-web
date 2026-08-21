@@ -8,7 +8,7 @@ frontend). Plan-first: **audita, mostra o plano, pede aprovação, então execut
 comando para **forçar/auditar só a parte de front do IAM** — o `<projeto>_authfront`, os
 fluxos de login/2FA/passkey, o nudge de email secundário, a view de dispositivos e o
 logout irreversível. O backend/serviço de auth, motor ReBAC e migração ficam no `/eng-iam`
-(schematize-engineering) e no `schematize-go`.
+(schematize-engineering) e na skill de backend do projeto.
 
 > **Regra suprema deste comando:** o cliente é **UX**; a decisão e o enforcement são
 > **server-side**. Nada aqui "protege" — o front **conduz o fluxo**, o servidor **impõe**.

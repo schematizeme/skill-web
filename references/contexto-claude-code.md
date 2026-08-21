@@ -1,6 +1,6 @@
 # Gestão de Contexto no Claude Code (handoff em sessões longas)
 
-> Parte da skill **schematize-web**. Implementa o handoff de contexto e a §28 (archive). Conteúdo específico de ferramenta (Claude Code / VS Code) — o princípio de archive está em `references/qualidade.md` (§28). Espelha o `references/contexto-claude-code.md` do schematize-go.
+> Parte da skill **schematize-web**. Implementa o handoff de contexto e a §28 (archive). Conteúdo específico de ferramenta (Claude Code / VS Code) — o princípio de archive está em `references/qualidade.md` (§28). Espelha o `references/contexto-claude-code.md` do a skill de backend do projeto.
 
 ## Por que
 

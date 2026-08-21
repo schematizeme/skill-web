@@ -17,7 +17,7 @@ module.exports = {
 
     // --- §43: segurança ---
     "security/detect-eval-with-expression": "error",
-    "react/no-danger": "warn", // dangerouslySetInnerHTML: revisar em /schematize-review
+    "react/no-danger": "warn", // dangerouslySetInnerHTML: revisar em /web-review
     "no-restricted-properties": ["error",
       { object: "localStorage", property: "setItem", message: "sessão/token em cookie HttpOnly, não localStorage (§43.2)" },
       { object: "sessionStorage", property: "setItem", message: "sessão/token em cookie HttpOnly, não sessionStorage (§43.2)" },

@@ -1,6 +1,6 @@
 # Qualidade: Tamanho, Doc-Comment, Índice, Archive e Definition of Done
 
-> Parte da skill **schematize-web**. Reúne os pisos de **processo** — os mesmos âncoras do `schematize-go` (§6 tamanho/doc, §28 archive, §35 DoD, §39 índice), adaptados ao frontend — pra quem vem do back encontrar tudo no mesmo lugar.
+> Parte da skill **schematize-web**. Reúne os pisos de **processo** — os mesmos âncoras da base `schematize-engineering` (§6 tamanho/doc, §28 archive, §35 DoD, §39 índice), adaptados ao frontend — pra quem vem do back encontrar tudo no mesmo lugar.
 
 ## Índice
 - 6. Complexidade e Tamanho (arquivos pequenos, micro-componentes, doc-comment)
@@ -56,7 +56,7 @@
 
 ### 28.0 Layout canônico — todo MD gerado no archive, root limpo (MUST)
 
-**Todo `.md` gerado pela skill/agente mora em `<projeto>_archive/`, NUNCA no root do projeto.** Vale para MAPA, índices, planos, relatórios, handoffs, checkpoints — qualquer artefato gerado. O root fica **limpo**: só código, config e os poucos MDs de projeto mantidos à mão (`README.md`, `CLAUDE.md`, `LICENSE`, e ADRs se versionados em `docs/adr/`). Largar MAPA/índice/plano/relatório no root é **violação** (§37) e fere a contenção de workspace.
+**Todo `.md` gerado pela skill/agente mora em `<projeto>_archive/`, NUNCA no root do projeto.** Vale para MAPA, índices, planos, relatórios, handoffs, checkpoints — qualquer artefato gerado. O root fica **limpo**: só código, config e os poucos MDs de projeto mantidos à mão (`README.md`, `CLAUDE.md`, `LICENSE`, `CHANGELOG.md`; ADR mora em `<projeto>_archive/decisoes/`). Largar MAPA/índice/plano/relatório no root é **violação** (§37) e fere a contenção de workspace.
 
 Subpastas canônicas (o archive **é versionado** — entra no PR):
 
@@ -75,7 +75,7 @@ Subpastas canônicas (o archive **é versionado** — entra no PR):
 **MUST — gerar SEMPRE** para:
 - Decisão de arquitetura de front, de design system, de stack (Next vs Astro), de estratégia de i18n/SEO, de performance.
 - Mudança de contrato consumido (API, props públicas de um componente compartilhado).
-- Qualquer geração de código não trivial (inclui código assistido por IA — §34 do schematize-go).
+- Qualquer geração de código não trivial (inclui código assistido por IA — §34 da `schematize-engineering`).
 
 ```
 <project>_archive/chat/<YYYY-MM-DD-HH-MM-SS>-<contexto>.md   # decisão/conversa
@@ -86,7 +86,7 @@ Conteúdo mínimo (sem placeholder vazio): pergunta/objetivo, entendimento, deci
 
 **MUST — garantia de processo**
 - PR sem o `.md` correspondente (quando a regra exige) **não passa no review**.
-- Sem segredo/PII nos MDs (§43 / §16.1 do schematize-go) — `scripts/archive-secret-scan.sh` varre antes do commit.
+- Sem segredo/PII nos MDs (§43 / §16.1 da `schematize-engineering`) — `scripts/archive-secret-scan.sh` varre antes do commit.
 
 ---
 
@@ -121,10 +121,11 @@ Uma task de frontend está pronta quando, cumulativamente:
 - [ ] Observabilidade de front: captura de erro e Web Vitals instrumentados (§49)
 - [ ] **Fluxo de ambientes respeitado** (§28.1, `references/ops.md`): mudança promovida por **dev local → teste local → GitHub → hml/preview → prd**, deploy/rollback **pelo pipeline** — nada editado direto no site/servidor deployado, nenhum deploy manual ad-hoc
 - [ ] **Archive de chat/task gerado e commitado** (§28) — gate rígido
+- [ ] **Nenhum efeito externo real fora de produção** (se a app envia e-mail/SMS/push/webhook/cobrança, inclusive por **server action** ou **route handler**): **preview/`VERCEL_ENV != production` é SINK**, guard deny-by-default dentro do provider (com teste que **vê a recusa**), cap por execução, endereços só no **domínio de teste em rota nula**. Normativa: `schematize-engineering` → `references/efeitos-externos.md`; anti-padrão §37 *"Efeito externo real a partir de preview/não-produção"*
 - [ ] TypeScript strict, lint (incl. jsx-a11y + security) e `npm audit` limpos
 - [ ] CI verde, code review aprovado
 
-> Bloqueantes absolutos (em negrito acima): archive (§28), ausência de macaquice (§37), a11y sem violação séria, CWV no budget, e smoke que prova conteúdo. Faltando qualquer um, **não está pronto** — independente do resto estar verde. Build verde não basta: tem que ser verde que **prova** conteúdo, acessibilidade e velocidade.
+> Bloqueantes absolutos (em negrito acima): archive (§28), ausência de macaquice (§37), a11y sem violação séria, CWV no budget, smoke que prova conteúdo, e **nenhum efeito externo real fora de produção** (preview é sink — `schematize-engineering` → `references/efeitos-externos.md`). Faltando qualquer um, **não está pronto** — independente do resto estar verde. Build verde não basta: tem que ser verde que **prova** conteúdo, acessibilidade e velocidade.
 
 ---
 
