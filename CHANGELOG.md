@@ -3,6 +3,16 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.16.0] — 2026-09-30
+Pedido do dono: **custo** — orquestrador em modelo padrão não desenvolve; micro-tasks baratas; `sonnet` como default nos subagents, `opus` só após falha.
+
+### Adicionado
+- **Piso "Orquestrador não desenvolve; subagent barato executa"** (`assets/CLAUDE.md` e `SKILL.md`), com remissão à normativa em `schematize-engineering` → `references/orquestracao.md` §9. O agent principal só **planeja, decompõe, despacha, supervisiona e revisa**; ação onerosa vira **micro-tasks**; subagents em **`sonnet`** por padrão e a escada é *mesmo subagent corrige (até 2 rodadas) → re-decompõe → só então `opus`*, com motivo no checkpoint. No **overdev**, cada item do checklist é executado por subagent `sonnet` e revisado pelo principal.
+- **Q.A. autônomo (`references/testes.md`, `/web-qa`):** os subagents rodam em `sonnet` por default; o principal só planeja/revisa e a escada sobe até `opus` só após falha.
+
+### Mantido (piso inalterado)
+- Todos os pisos anteriores seguem valendo sem afrouxamento; a regra nova só define **quem executa** e a que custo, não o que é exigido.
+
 ## [1.15.0] — 2026-08-21
 
 ### Adicionado

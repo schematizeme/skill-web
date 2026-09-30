@@ -28,7 +28,8 @@ Pergunte a modalidade:
   visual), pausa entre fases, mostra parcial. Default quando há atualização de baseline
   visual ou ambiente sensível.
 - **De uma vez (autônomo)** — paraleliza categorias independentes (subagents do Claude
-  Code) e usa watchdog que retoma de checkpoint até concluir. Condição de parada explícita
+  Code, em `sonnet` por default — o principal só planeja/revisa; escada até `opus` só após falha, ver
+  `schematize-engineering` → `references/orquestracao.md` §9) e usa watchdog que retoma de checkpoint até concluir. Condição de parada explícita
   (tudo verde OU falha bloqueante escala pro humano); sem retry infinito.
 
 Regras: atualização de baseline de regressão visual só com revisão humana do diff de pixels

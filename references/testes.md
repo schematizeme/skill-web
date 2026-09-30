@@ -90,7 +90,7 @@ A malha de Q.A. inclui passos potencialmente custosos/destrutivos (e2e contra am
 
 **MUST — após aprovado**
 4. **Oferecer modalidade:** *faseado e assistido* (pausa entre fases, mostra parcial — default pra qualquer passo que reescreva baseline visual) **ou** *de uma vez (autônomo)*.
-5. No autônomo: **subagents** paralelizam categorias independentes (a11y, visual, e2e por suíte) respeitando dependências; **watchdog** retoma de checkpoint até concluir, com condição de parada explícita e **sem retry infinito**. Re-baseline visual e e2e contra produção exigem confirmação extra no momento.
+5. No autônomo: **subagents** paralelizam categorias independentes (a11y, visual, e2e por suíte) respeitando dependências — **rodam em `sonnet` por default**, o principal só planeja/revisa (não executa a suíte) e a escada sobe até `opus` **só após falha** (mesmo subagent corrige até 2 rodadas → re-decompõe → `opus` com motivo registrado; `schematize-engineering` → `references/orquestracao.md` §9); **watchdog** retoma de checkpoint até concluir, com condição de parada explícita e **sem retry infinito**. Re-baseline visual e e2e contra produção exigem confirmação extra no momento.
 
 **VETADO**
 - Pular o plano/aprovação "pra ir mais rápido" — é macaquice da §37. Q.A. sem plano aprovado **não roda**.
