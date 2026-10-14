@@ -3,7 +3,7 @@ name = "schematize-web"
 tag = "Frontend · Next.js/Astro"
 status = "stable"
 order = 2
-current_version = "1.16.2"
+current_version = "1.17.0"
 href = "/web"
 
 [descriptions]

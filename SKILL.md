@@ -1,7 +1,7 @@
 ---
 name: schematize-web
 metadata:
-  version: 1.16.2
+  version: 1.17.0
 description: >-
   Frontend em Next.js ou Astro com TypeScript strict: fronteira client/server, segurança no servidor, a11y WCAG 2.2
   AA, Core Web Vitals, SEO, i18n e testes. Use ao criar ou revisar UI, componente, página, rota, App Router/RSC,
@@ -12,7 +12,7 @@ description: >-
 
 Conjunto normativo que rege como **site e interface** são projetados, construídos, testados e operados aqui — com foco declarado em **performance de SEO e de velocidade**. É a contraparte de frontend da skill de backend do projeto: o que for servidor/API/dados/infra de back **delega à skill de backend do projeto**; o que for UI/página/rota de front/estilo/SEO/acessibilidade/performance é governado aqui.
 
-**Versão:** skill `schematize-web` v1.16.2. Changelog em `CHANGELOG.md`. Versões de stack e thresholds (que mudam) ficam em `references/stack-versoes.md` (Anexo A), atualizado à parte.
+**Versão:** skill `schematize-web` v1.17.0. Changelog em `CHANGELOG.md`. Versões de stack e thresholds (que mudam) ficam em `references/stack-versoes.md` (Anexo A), atualizado à parte.
 
 ## Comandos (Claude Code)
 
