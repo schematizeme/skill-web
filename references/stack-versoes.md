@@ -1,16 +1,16 @@
 # Anexo A — Versões Correntes e Thresholds (frontend)
 
-> Parte da skill **schematize-web**. **Esta é a fonte volátil** — versões de stack e thresholds mudam. Atualize aqui (revisão trimestral) sem mexer no corpo normativo. **Verificado em: 2026-08-21**
-> (números conferidos no registry do npm e no `nodejs.org/dist/index.json` nesta data). Sempre confirme o número atual (`npm show <pkg> version`, release notes oficiais, web.dev, w3.org) antes de pinar.
+> Parte da skill **schematize-web**. **Esta é a fonte volátil** — versões de stack e thresholds mudam. Atualize aqui (revisão trimestral) sem mexer no corpo normativo. **Verificado em: 2026-10-14**
+> (números conferidos no registry do npm, em `nodejs.org/dist/index.json` e no `nodejs/Release` schedule.json nesta data). Sempre confirme o número atual (`npm show <pkg> version`, release notes oficiais, web.dev, w3.org) antes de pinar.
 
 ## Stacks (LTS / estável de produção)
 
-| Stack | Alvo (verificado em 2026-08-21) | Notas |
+| Stack | Alvo (verificado em 2026-10-14) | Notas |
 |---|---|---|
-| **Node.js** | **24.19.0 LTS** (Krypton) p/ produção | 22.23.2 (Jod) em manutenção; **26.7.0 é *Current* não-LTS** (LTS só em out/2026). A partir do 27, todo major vira LTS após 6 meses. |
-| **Next.js** | **16.3.2** | Requer **Node ≥ 20**, **React 19**, Turbopack como bundler default. Next 15 sai de suporte em out/2026 — migrar. |
-| **Astro** | **7.2.4** | Requer Node ≥ 22.12. *(Era `6.x` neste anexo até 21/08/2026 — o 7 já é o estável.)* |
-| **React** | **19.2.8** | Server Components/Actions estáveis. |
+| **Node.js** | **24.21.0 LTS** (Krypton) p/ produção | 22.23.3 (Jod) em manutenção (EOL 30/04/2027); **26.11.1 ainda é *Current*** — entra em LTS em **28/10/2026** (schedule oficial; suporte até 30/04/2029): hoje não vai para produção, daqui a 2 semanas é candidato. A partir do 27, um major por ano. |
+| **Next.js** | **16.4.0** | Requer **Node ≥ 20**, **React 19**, Turbopack como bundler default. **Next 15 sai de suporte em 21/10/2026** (2 anos de LTS de manutenção desde 21/10/2024): **BLOQUEIO** — projeto novo nasce no 16 e projeto em 15 entra no checklist de migração (ADR) antes dessa data; depois dela, CVE novo em 15 não tem patch garantido. |
+| **Astro** | **7.3.8** | Requer Node ≥ 22.12. *(Era `6.x` neste anexo até 21/08/2026 — o 7 já é o estável.)* |
+| **React** | **19.3.0** | Server Components/Actions estáveis. |
 | **TypeScript** | **7.0.2** — **GA, não mais RC** | O compilador *Go-native* saiu do RC. `strict: true` sempre; `erasableSyntaxOnly` + `verbatimModuleSyntax` quando o projeto quer rodar TS direto no Node sem build step. |
 
 > **Regra:** site novo é Next.js **ou** Astro (§40.1). Pin exato no lockfile. Mudança de major exige ADR. Confirme o patch atual antes de fixar.

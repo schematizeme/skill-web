@@ -3,6 +3,17 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.17.0] — 2026-10-14
+Anexo de versões reverificado em 2026-10-14 e SKILL.md enxuto.
+
+### Corrigido
+- `references/stack-versoes.md`: Next 15 sai de suporte em **21/10/2026** — virou bloqueio (projeto novo no 16; em 15, migração antes da data); Next 16.4.0, Astro 7.3.8, React 19.3.0, Node 24.21.0 LTS, Node 26 entra em LTS em 28/10/2026 (schedule oficial). *Por quê:* o anexo dizia só "migrar", sem data nem consequência.
+- `SKILL.md`: o bullet de efeito externo tinha parágrafo de normativa duplicada da base; agora 3 linhas + ponteiro `schematize-engineering → references/efeitos-externos.md`, mantendo só o específico do front (preview, `VERCEL_ENV`, endpoint público de envio).
+- `description` em `>-` (YAML antes inválido) com 350 caracteres ou menos.
+
+### Verificado
+- `references/observabilidade.md` (§49) não contradiz `schematize-engineering → references/observabilidade.md`; é específico do front (RUM, consentimento).
+
 ## [1.16.2] — 2026-09-30
 O piso de orquestração passa a ser **herdado** da base em vez de copiado à mão: uma mudança na engineering não exige mais editar 38 arquivos.
 
