@@ -3,9 +3,8 @@ name: schematize-web
 metadata:
   version: 1.17.0
 description: >-
-  Frontend em Next.js ou Astro com TypeScript strict: fronteira client/server, segurança no servidor, a11y WCAG 2.2
-  AA, Core Web Vitals, SEO, i18n e testes. Use ao criar ou revisar UI, componente, página, rota, App Router/RSC,
-  server action ou estilo. Backend e banco: skills do rol.
+  Frontend Next.js ou Astro com TypeScript strict: fronteira client/server, segurança, a11y WCAG 2.2 AA, CWV, SEO,
+  i18n, testes. Use ao criar ou revisar componente, página, rota, RSC ou server action. Visual: schematize-design.
 ---
 
 # Padrões de Frontend da Casa (schematize-web)
