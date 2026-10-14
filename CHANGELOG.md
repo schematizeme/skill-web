@@ -3,13 +3,7 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
-## [Não lançado]
-Pendente de release (sem bump de versão): a observabilidade ganhou dona (`schematize-observability`).
-
-### Alterado
-- `references/observabilidade.md` §49.5 passa a apontar para `schematize-observability` (padrão OTel, Collector, redaction, amostragem, SLO) e mantém só o que é do front (Faro/OTel-JS, endpoint público do Collector, `traceparent` não confiável, Web Vitals de baixa cardinalidade). §49.1 a §49.4 (erro, RUM, log sem PII, consentimento) intactos.
-
-## [1.18.0] — 2026-10-14 (pendente de release: sem bump; o release fica com o orquestrador)
+## [1.18.0] — 2026-10-14
 O refino visual saiu da web e foi para a nova skill `schematize-design`; a web fica com o piso técnico. Motivo: `design-refino.md` misturava duas coisas de donos diferentes (gosto e direção visual de um lado, engenharia de front do outro) e já divergia da lista de recusas de "cara de IA" usada em design (por exemplo, recomendava halo radial atrás do hero, que a lista de recusas veda). Uma fonte só para o gosto evita a deriva.
 
 ### Alterado
@@ -19,6 +13,14 @@ O refino visual saiu da web e foi para a nova skill `schematize-design`; a web f
 ### Mantido (piso inalterado)
 - Ícones, nunca emoji, continua MUST na web.
 - Orçamento de CWV (§45), a11y AA (§44) e tokens/tema (§59) continuam sendo desta skill.
+
+a observabilidade ganhou dona (`schematize-observability`).
+
+### Alterado (observabilidade)
+- `references/observabilidade.md` §49.5 passa a apontar para `schematize-observability` (padrão OTel, Collector, redaction, amostragem, SLO) e mantém só o que é do front (Faro/OTel-JS, endpoint público do Collector, `traceparent` não confiável, Web Vitals de baixa cardinalidade). §49.1 a §49.4 (erro, RUM, log sem PII, consentimento) intactos.
+
+### Alterado (herdados)
+- Blocos herdados ressincronizados com a `schematize-engineering` v0.27.0 (`tools/sync-herdados.mjs`): orquestração com a regra de imagem (nunca pelo Claude; detecta Codex/Gemini e pergunta ao usuário qual usar, Codex como sugestão) e `schematize overdev delegar` (comando do app) no lugar do falso nome de skill `schematize-overdev`.
 
 ## [1.17.0] — 2026-10-14
 Anexo de versões reverificado em 2026-10-14 e SKILL.md enxuto.
