@@ -1,6 +1,6 @@
 # Observabilidade de Frontend
 
-> Parte da skill **schematize-web**. O front também precisa ser observável — erro de cliente, performance de campo e telemetria. Sem PII, sempre. O lado servidor de observabilidade (logs estruturados, tracing, métricas RED/USE) é da skill de backend do projeto (§16).
+> Parte da skill **schematize-web**. O front também precisa ser observável — erro de cliente, performance de campo e telemetria. Sem PII, sempre. O padrão de observabilidade (logs estruturados, tracing, métricas RED/USE, SLO) é da `schematize-observability`; o §16 da base mantém os pisos.
 
 ## Índice
 - 49. Observabilidade de Frontend
@@ -74,13 +74,13 @@ A `schematize-institutional` delega o consentimento de cookies a esta skill; ent
 
 - Sem fingerprinting encoberto. Terceiros de telemetria entram com CSP (§43.3), SRI quando externo, e dentro do budget de performance (§45).
 
-### 49.5 Integração com a stack da casa (LGTM+)
+### 49.5 Integração com a stack da casa
 
 **MUST**
-- A telemetria de front integra a **mesma stack de observabilidade da casa** (§16 da `schematize-engineering`), pra front e back caírem no mesmo Grafana e casarem por `trace_id`:
-  - **RUM + erros:** **Grafana Faro** (Faro Web SDK) e/ou **OpenTelemetry-JS** no browser → **Grafana Alloy** (coletor) → **Tempo** (traces do usuário), **Loki** (logs/erros de cliente), **Prometheus/Mimir** (Web Vitals de campo como métrica).
-  - **Propagação W3C Trace Context** do browser até o backend — um único trace ponta a ponta (front → BFF → serviço).
-  - **Dashboards e alertas** de front (erro por rota/release, p75 de LCP/INP/CLS de campo, taxa de erro de hidratação) **versionados como código** no Grafana e entregues com o serviço; **Helm chart** quando o front tem runtime próprio (BFF/route handlers/adapter em container).
-- Sentry (ou equivalente) é aceitável como complemento, mas o **eixo é o Grafana/LGTM+** pra correlação com o backend — evita telemetria de front ilhada de silo separado.
+- A telemetria de front integra a **mesma stack de observabilidade da casa**, pra front e back caírem no mesmo Grafana e casarem por `trace_id`. O padrão (OpenTelemetry, Collector, redaction, amostragem, SLO, stack de referência) é da `schematize-observability` — `schematize-observability -> references/front-llm.md` e `references/padrao-otel.md`; aqui fica **só o que é do front**:
+  - **RUM + erros:** **Grafana Faro** (Faro Web SDK) e/ou **OpenTelemetry-JS** no browser, enviando OTLP ao Collector (endpoint público com CORS restrito, limite de taxa e token de app público); Web Vitals de campo como métrica de **baixa cardinalidade** (rota por template, versão; nunca URL crua ou `user_id`).
+  - **Propagação W3C Trace Context** do browser até o backend — um único trace ponta a ponta (front -> BFF -> serviço); o `traceparent` vindo do browser é **não confiável** e não manda na amostragem.
+  - **Dashboards e alertas** de front (erro por rota/release, p75 de LCP/INP/CLS de campo, taxa de erro de hidratação) **versionados como código**; **Helm chart** quando o front tem runtime próprio (BFF/route handlers/adapter em container).
+- Sentry (ou equivalente) é aceitável como complemento, mas o **eixo é o Grafana/OTel** pra correlação com o backend — evita telemetria de front ilhada de silo separado. SaaS de telemetria passa por ADR e nunca recebe dado de hml em conta de prd (`schematize-observability -> references/ambientes.md`).
 
 > O front observável é o que conta a verdade sobre o usuário real — erro dele, velocidade dele — sem nunca expor quem ele é. Telemetria com PII é vazamento; telemetria sem contexto é ruído.

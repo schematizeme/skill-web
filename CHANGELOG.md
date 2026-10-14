@@ -3,6 +3,12 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [Não lançado]
+Pendente de release (sem bump de versão): a observabilidade ganhou dona (`schematize-observability`).
+
+### Alterado
+- `references/observabilidade.md` §49.5 passa a apontar para `schematize-observability` (padrão OTel, Collector, redaction, amostragem, SLO) e mantém só o que é do front (Faro/OTel-JS, endpoint público do Collector, `traceparent` não confiável, Web Vitals de baixa cardinalidade). §49.1 a §49.4 (erro, RUM, log sem PII, consentimento) intactos.
+
 ## [1.18.0] — 2026-10-14 (pendente de release: sem bump; o release fica com o orquestrador)
 O refino visual saiu da web e foi para a nova skill `schematize-design`; a web fica com o piso técnico. Motivo: `design-refino.md` misturava duas coisas de donos diferentes (gosto e direção visual de um lado, engenharia de front do outro) e já divergia da lista de recusas de "cara de IA" usada em design (por exemplo, recomendava halo radial atrás do hero, que a lista de recusas veda). Uma fonte só para o gosto evita a deriva.
 
