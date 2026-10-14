@@ -1,6 +1,6 @@
 # Referências de Design e Coesão Visual
 
-> Parte da skill **schematize-web**. O alvo do skill é **site rápido em SEO e velocidade** — mas rápido e feio não vende. Aqui: **de onde tirar referência** (além do apple.com) e **como manter coesão visual** por design (documentada, não por gosto). Os tokens concretos estão em `references/design-tokens.md`. **Coesão evita o site quebrado; para fazê-lo parecer *desenhado* (as alavancas táticas com números — ícones-não-emoji, espaço, hierarquia, acento, elevação) veja `references/design-refino.md`.**
+> Parte da skill **schematize-web**. O alvo do skill é **site rápido em SEO e velocidade** — mas rápido e feio não vende. Aqui: **de onde tirar referência** (além do apple.com) e **como manter coesão visual** por design (documentada, não por gosto). Os tokens concretos estão em `references/design-tokens.md`. **Coesão evita o site quebrado; para fazê-lo parecer *desenhado* (as alavancas táticas com números — ícones-não-emoji, espaço, hierarquia, acento, elevação) veja `schematize-design → references/piso-de-qualidade.md` (o piso técnico de UI fica em `references/design-refino.md`).**
 
 ## Filosofia
 

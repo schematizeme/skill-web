@@ -3,6 +3,17 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.18.0] — 2026-10-14 (pendente de release: sem bump; o release fica com o orquestrador)
+O refino visual saiu da web e foi para a nova skill `schematize-design`; a web fica com o piso técnico. Motivo: `design-refino.md` misturava duas coisas de donos diferentes (gosto e direção visual de um lado, engenharia de front do outro) e já divergia da lista de recusas de "cara de IA" usada em design (por exemplo, recomendava halo radial atrás do hero, que a lista de recusas veda). Uma fonte só para o gosto evita a deriva.
+
+### Alterado
+- `references/design-refino.md` vira **ponteiro para `schematize-design`** (`references/piso-de-qualidade.md`, `references/recusas-anti-ai-slop.md`, `references/animacao.md`, `references/tokens-tipografia-cor.md`) e mantém só o **piso técnico**: regra zero (ícone SVG, nunca emoji), 4 estados com foco visível e alvo de 44px, contraste medido, movimento só em `transform`/`opacity` com `prefers-reduced-motion` e conteúdo visível, zero CLS, esqueleto no carregamento, tema sem flash, budget de CWV. As 13 alavancas migraram, com números, para a `schematize-design` (com duas correções: sem halo radial no hero, sem rótulo em caixa alta como kicker).
+- `SKILL.md` (mapa de references e bullet de refino), `assets/CLAUDE.md` (item 17), `references/anti-padroes.md` (itens sobre emoji e "front coeso mas amador"), `references/ui-padroes.md` e `references/design-referencias.md`: os ponteiros para o refino agora citam `schematize-design → references/piso-de-qualidade.md`.
+
+### Mantido (piso inalterado)
+- Ícones, nunca emoji, continua MUST na web.
+- Orçamento de CWV (§45), a11y AA (§44) e tokens/tema (§59) continuam sendo desta skill.
+
 ## [1.17.0] — 2026-10-14
 Anexo de versões reverificado em 2026-10-14 e SKILL.md enxuto.
 

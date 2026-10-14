@@ -1,6 +1,6 @@
 # Padrões de UI da casa — o que a geração padrão erra (app-shell, gráficos, date/modal, mobile)
 
-> Parte da skill **schematize-web**. `design-refino.md` dá o **acabamento visual**; este dá
+> Parte da skill **schematize-web**. `schematize-design → references/piso-de-qualidade.md` dá o **acabamento visual** (e `design-refino.md` o piso técnico); este dá
 > os **padrões de aplicação** que a geração de front automática quase sempre entrega mal ou
 > não entrega: **gráficos, menu lateral, largura fluida, date-picker e modal no padrão
 > Material, e mobile de verdade utilizável**. São os maiores buracos de um front gerado —
@@ -26,7 +26,7 @@
 
 ## 3. Largura dinâmica / layout fluido (MUST — chega de largura quebrada)
 - **Fluido com teto de legibilidade:** o conteúdo **preenche o espaço** (`1fr`, `%`, `fr`),
-  mas texto corrido respeita **`max-width` ~65–75ch** (§design-refino). Nada de largura fixa
+  mas texto corrido respeita **`max-width` ~65–75ch** (`schematize-design → references/piso-de-qualidade.md`). Nada de largura fixa
   em px que estoura em tela grande ou espreme em pequena.
 - **`clamp()` para tipografia e espaço fluidos** (`font-size: clamp(1rem, .9rem + .5vw,
   1.25rem)`); **`minmax()`/`auto-fit`/`auto-fill`** em grids de cards
@@ -68,9 +68,9 @@
   **`<dialog>` nativo**. À mão dá quase sempre foco vazando e teclado quebrado.
 - **Comportamento Material obrigatório:** **scrim/overlay**, **focus-trap** dentro do modal,
   **`Esc` fecha**, **foco volta ao gatilho** ao fechar, `role="dialog"` + `aria-modal` +
-  `aria-labelledby`, **body sem scroll** enquanto aberto, animação enter/exit curta (§refino).
+  `aria-labelledby`, **body sem scroll** enquanto aberto, animação enter/exit curta (`schematize-design → references/animacao.md`).
 - **Responsivo:** no mobile, dialog **vira full-screen** (ou bottom-sheet) — padrão Material;
-  não um cartãozinho espremido. Ação destrutiva **confirma** e o botão primário domina (§refino).
+  não um cartãozinho espremido. Ação destrutiva **confirma** e o botão primário domina (`schematize-design → references/piso-de-qualidade.md`).
 - Não empilhe modal sobre modal sem necessidade; prefira fluxo ou drawer.
 
 ## 7. Responsividade + mobile utilizável (MUST — revisão obrigatória)
@@ -99,7 +99,7 @@
 - **Date-picker e modal** por primitivo acessível no **padrão Material** (nunca à mão/quebrado).
 - **Mobile utilizável** verificado em ~360px: alvos ≥44px, sem hover-only, reflow feito,
   teclado não cobre input, zero scroll-x.
-- Tudo dentro do budget de **CWV** (§45), **a11y AA** (§44) e **tokens/refino** (§design-refino).
+- Tudo dentro do budget de **CWV** (§45), **a11y AA** (§44) e **tokens/refino** (`schematize-design → references/piso-de-qualidade.md`).
 
 ## Checklist de reprovação (rode antes de dar o front por pronto)
 - [ ] Ação de escrita **abre no contexto ativo** (ou força escolha) e **mostra** onde vai gravar — nunca "primeiro de N"?

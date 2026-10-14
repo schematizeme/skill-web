@@ -209,11 +209,11 @@ Prioridades, em ordem de desempate:
 ### Design e refino visual
 
 42. **Emoji na estrutura do site** (nav/botão/card/feature/bullet/título/empty state/status/seta) no lugar de ícone — sem o usuário ter pedido.
-    → **Um icon set** (Lucide/Phosphor/Heroicons/Radix), SVG com `currentColor`, tamanho por token, `aria-hidden` quando decorativo. Emoji renderiza diferente por SO, não herda cor/peso (quebra tema/dark) e destoa da marca (`references/design-refino.md`, regra zero). Emoji só quando é conteúdo pedido (reação, UGC, post sobre emoji).
+    → **Um icon set** (Lucide/Phosphor/Heroicons/Radix), SVG com `currentColor`, tamanho por token, `aria-hidden` quando decorativo. Emoji renderiza diferente por SO, não herda cor/peso (quebra tema/dark) e destoa da marca (`references/design-refino.md`, regra zero; direção visual em `schematize-design → references/recusas-anti-ai-slop.md`). Emoji só quando é conteúdo pedido (reação, UGC, post sobre emoji).
 43. **Misturar icon sets** (Lucide + Font Awesome + emoji na mesma tela) ou `stroke-width`/grade de ícone inconsistentes.
     → Uma família só, mesmo `stroke`, mesma grade (20/24px). Falta o ícone no set? escolhe outro conceito do set ou adiciona o SVG — nunca tapa com emoji (`design-refino.md`).
 44. **Front "coeso" mas amador** — tokens no lugar, mas espaçamento apertado/uniforme, hierarquia tímida (tudo do mesmo tamanho), acento espalhado em tudo, borda grossa ou sombra dura, texto full-width, sem estados de hover/foco, empty/loading/erro crus.
-    → Coesão evita o site *quebrado*; refino faz parecer *desenhado*. Aplique as **13 alavancas** e rode o **checklist de reprovação** (`references/design-refino.md`) — os quatro maiores: **espaço, hierarquia, um acento, ícone-não-emoji**. Refino é subtração, dentro do budget de CWV (§45).
+    → Coesão evita o site *quebrado*; refino faz parecer *desenhado*. Aplique as **13 alavancas** da `schematize-design` (`schematize-design → references/piso-de-qualidade.md`) e rode o checklist técnico daqui (`references/design-refino.md`) — os quatro maiores: **espaço, hierarquia, um acento, ícone-não-emoji**. Refino é subtração, dentro do budget de CWV (§45).
 
 ### IAM no cliente (front de auth, sessão, autorização)
 
