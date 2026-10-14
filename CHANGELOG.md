@@ -6,6 +6,10 @@ com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 ## [1.19.0] — 2026-10-14
 Integração com `schematize-iam` e `schematize-analytics`; testes para os scripts que não tinham.
 
+### Corrigido
+
+- `test-skeleton.test.sh`/`smoke-selfcheck.test.sh`: o `trap` de limpeza vira função com `p` local (fim do SC2154); scripts no piso de shell.
+
 ### Alterado
 - `references/iam.md` deixa de recopiar protocolo, tiers de fator, regra do 2FA baseline, recuperação e prazos de sessão: aponta para `schematize-iam → references/protocolos.md`/`fatores.md`/`sessao.md`/`recuperacao-risco.md`/`topologia.md` e para o gate `schematize-iam → scripts/check-iam.sh`; fica o que é do navegador (telas, cookie, WebAuthn no browser, logout que chama o revoke). `/web-iam` idem.
 - `references/observabilidade.md` (49.4) aponta para `schematize-analytics` (contrato de evento, base legal, gate `check-tracking.sh`) e explicita o gate de consentimento no carregamento do SDK; `SKILL.md` ganha as duas fronteiras.

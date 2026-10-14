@@ -7,7 +7,8 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 W="$(mktemp -d)"; PIDS=()
-trap 'for p in "${PIDS[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null; done; rm -rf "$W"' EXIT
+limpa() { local p; for p in "${PIDS[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null; done; rm -rf "$W"; }
+trap limpa EXIT
 command -v python3 >/dev/null && command -v curl >/dev/null || { echo "smoke-selfcheck.test: python3/curl ausentes — nada provado"; exit 2; }
 rc=0
 sobe() { # dir -> porta (stdout)
