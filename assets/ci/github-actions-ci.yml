@@ -10,7 +10,7 @@ jobs:
   standards-gate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with: { fetch-depth: 0 }
       - name: Gate de padrões de frontend (DoD/§37) no diff
         run: bash .claude/skills/schematize-web/scripts/check-diff.sh "origin/${{ github.base_ref || 'main' }}"
@@ -27,8 +27,8 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         # A versao vem do repo (.nvmrc), nao de 'lts/*' movel: o CI tem de rodar na MESMA
         # versao do dev. O numero da LTS corrente vive no anexo volatil da skill.
         with:
@@ -51,8 +51,8 @@ jobs:
   e2e-a11y:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         # A versao vem do repo (.nvmrc), nao de 'lts/*' movel: o CI tem de rodar na MESMA
         # versao do dev. O numero da LTS corrente vive no anexo volatil da skill.
         with:
@@ -68,8 +68,8 @@ jobs:
   lighthouse-cwv:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         # A versao vem do repo (.nvmrc), nao de 'lts/*' movel: o CI tem de rodar na MESMA
         # versao do dev. O numero da LTS corrente vive no anexo volatil da skill.
         with:
@@ -86,8 +86,8 @@ jobs:
   visual-regression:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         # A versao vem do repo (.nvmrc), nao de 'lts/*' movel: o CI tem de rodar na MESMA
         # versao do dev. O numero da LTS corrente vive no anexo volatil da skill.
         with:
@@ -100,8 +100,8 @@ jobs:
   dep-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       - name: npm audit (higiene de dependência — §43.7)
         run: npm audit --audit-level=high
       - name: Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
