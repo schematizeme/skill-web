@@ -2,6 +2,7 @@
 description: schematize-web — força/audita/scaffolda o IAM (front de auth próprio em auth.<domain>, fluxos de login/2FA/passkey, view de dispositivos, logout irreversível) do lado do cliente, ou audita um authfront existente
 argument-hint: "[audit | scaffold]"
 ---
+<!-- cross-skill: protocolos.md, fatores.md, sessao.md -> schematize-iam -->
 
 Governe o lado **cliente/front** do IAM da casa pelo padrão (`references/iam.md`, recorte
 frontend). Plan-first: **audita, mostra o plano, pede aprovação, então executa.** Use este
@@ -9,6 +10,11 @@ comando para **forçar/auditar só a parte de front do IAM** — o `<projeto>_au
 fluxos de login/2FA/passkey, o nudge de email secundário, a view de dispositivos e o
 logout irreversível. O backend/serviço de auth, motor ReBAC e migração ficam no `/eng-iam`
 (schematize-engineering) e na skill de backend do projeto.
+
+> **Broker, fatores e sessão são da `schematize-iam`** (`schematize-iam → references/protocolos.md`,
+> `schematize-iam → references/fatores.md`, `schematize-iam → references/sessao.md`; gate estático
+> `schematize-iam → scripts/check-iam.sh`). Este comando audita só o lado do cliente e **aponta** para
+> `references/iam.md` desta skill, que por sua vez aponta para lá — não recopie a spec do broker aqui.
 
 > **Regra suprema deste comando:** o cliente é **UX**; a decisão e o enforcement são
 > **server-side**. Nada aqui "protege" — o front **conduz o fluxo**, o servidor **impõe**.
@@ -55,7 +61,7 @@ Confirme/scaffolde que o auth tem **front próprio, app à parte** (`references/
 
 ## 5. Sessão / dispositivos / logout (no front)
 - **Token em cookie `HttpOnly`+`Secure`+`SameSite`**, **NUNCA** em `localStorage`; o front
-  não manuseia token. **Sessão 7d por padrão; "confiar neste dispositivo?" → 90d** (refresh
+  não manuseia token. **"Confiar neste dispositivo?"** na UI (prazos: `schematize-iam → references/sessao.md`; refresh
   silencioso — nada de "15 min e é chutado"). **Step-up UX** (passkey/push) em ops sensível.
 - **View de dispositivos:** lista ativos (rótulo amigável, IP/geo, último uso), **remover
   um** + **"sair de todos"** — cada ação é pedido ao servidor.

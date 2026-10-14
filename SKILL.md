@@ -3,8 +3,7 @@ name: schematize-web
 metadata:
   version: 1.18.0
 description: >-
-  Frontend Next.js ou Astro com TypeScript strict: fronteira client/server, segurança, a11y WCAG 2.2 AA, CWV, SEO,
-  i18n, testes. Use ao criar ou revisar componente, página, rota, RSC ou server action. Visual: schematize-design.
+  Frontend Next.js ou Astro (TypeScript strict): client/server, segurança, a11y WCAG 2.2 AA, CWV, SEO, i18n, testes. Use ao criar/revisar componente ou rota. Visual: schematize-design.
 ---
 
 # Padrões de Frontend da Casa (schematize-web)
@@ -12,6 +11,30 @@ description: >-
 Conjunto normativo que rege como **site e interface** são projetados, construídos, testados e operados aqui — com foco declarado em **performance de SEO e de velocidade**. É a contraparte de frontend da skill de backend do projeto: o que for servidor/API/dados/infra de back **delega à skill de backend do projeto**; o que for UI/página/rota de front/estilo/SEO/acessibilidade/performance é governado aqui.
 
 **Versão:** skill `schematize-web` v1.18.0. Changelog em `CHANGELOG.md`. Versões de stack e thresholds (que mudam) ficam em `references/stack-versoes.md` (Anexo A), atualizado à parte.
+
+## Precedência e herança (leia antes de divergir)
+
+<!-- herdado:engineering/precedencia:dominio intro="Esta skill é o recorte **frontend (Next.js/Astro, TypeScript strict)** da base: o piso geral é o da `schematize-engineering`; aqui mora a especialização de UI, rota, a11y, CWV e i18n." cmd="web" -->Esta skill é o recorte **frontend (Next.js/Astro, TypeScript strict)** da base: o piso geral é o da `schematize-engineering`; aqui mora a especialização de UI, rota, a11y, CWV e i18n.
+
+1. **Onde esta skill divergir da base, a BASE MANDA.** Aqui mora a especialização do domínio ou da
+   ferramenta — o como, o padrão, o gate. Divergência de *piso* é defeito desta skill, não variante local.
+2. **O que não está repetido aqui é HERDADO, não dispensado.** Esta skill herda os pisos da base e
+   os comandos dela cobrem o **domínio**, não o piso geral. Valem integralmente, sem cópia local:
+   - **§28 Archive** — `<projeto>/<projeto>_archive/` é **repositório git próprio, PRIVADO e
+     obrigatório**, criticidade 0 (`schematize-archive`).
+   - **§35 Definition of Done** e a lista de anti-padrões (citada por **título**, nunca por número).
+   - **§39 Índice/MAPA** — enumeração exaustiva (uma entrada por unidade chamável, `M == N`) e grafo
+     com arestas em ASCII (`A -> B`), nunca a seta unicode.
+   - **IAM** (`schematize-engineering` → `references/iam.md`): identidade ≠ email, ≥2 fatores, ReBAC
+     multi-tenant, argon2id-only para senha nova, sessão longa e logout irreversível.
+   - **Efeito externo** nunca sai de não-produção (`schematize-engineering` →
+     `references/efeitos-externos.md`).
+   - **Orquestração** (`schematize-engineering` → `references/orquestracao.md` §9): o principal não
+     desenvolve (é Claude Opus); executor mais barato que resolve — `haiku`/`sonnet` → Codex Terra → Cursor → `opus` só após falha; visual direto ao Codex; imagem nunca pelo Claude: detecta Codex/Gemini e pergunta ao usuário qual usar (Codex é a sugestão, não automática), nunca API paga.
+3. **QA, ops, IAM e índice não têm comando próprio aqui:** vêm da base `/eng-*`. Para trabalho
+   contínuo use `/eng-overdev`; para planejar `/eng-plan`; para varrer a base `/eng-scan`; para
+   revisão geral `/eng-review` (e `/eng-ops`, `/eng-iam`, `/eng-index`). Os comandos
+   `/web-*` cobrem o domínio desta skill; o piso geral é o da base.<!-- /herdado -->
 
 ## Comandos (Claude Code)
 
@@ -46,7 +69,7 @@ Mapa de references — leia o que casa com a tarefa:
 | Fronteira client/server (RSC, route handler, server action, BFF), componentes pequenos, estado, data fetching, loading/error/empty | `references/arquitetura.md` |
 | Data fetching + cache/revalidação, mutations (server actions), estado (servidor/cliente/URL), formulários com validação server-side | `references/dados-estado.md` |
 | Segredo no servidor, cookies de sessão, CSP/headers, XSS, sanitização, open-redirect, CSRF, higiene de dependência, SRI, **envio de e-mail/efeito externo fora de prd (preview = NÃO-produção, sink por default, rate-limit no endpoint público)** | `references/seguranca.md` |
-| **IAM no cliente/front:** front de auth próprio (`auth.<domain>`), OIDC/OAuth2.1 + PKCE, onboarding/2FA, seletor de método, passkey/WebAuthn no browser, nudge de email secundário (detecção de provedor + tooltip), view de dispositivos, logout irreversível, token em cookie (nunca localStorage), authz é UX/enforcement server-side | `references/iam.md` |
+| **IAM no cliente/front:** front de auth próprio (`auth.<domain>`), OIDC/OAuth2.1 + PKCE, onboarding/2FA, seletor de método, passkey/WebAuthn no browser, nudge de email secundário (detecção de provedor + tooltip), view de dispositivos, logout irreversível, token em cookie (nunca localStorage), authz é UX/enforcement server-side (o broker em si: `schematize-iam`) | `references/iam.md` |
 | Acessibilidade WCAG 2.2 AA: semântica, teclado, foco, contraste, motion, ARIA | `references/acessibilidade.md` |
 | Performance: Core Web Vitals, budgets de bundle, imagem/fonte, code splitting, zero CLS, Lighthouse no CI | `references/performance.md` |
 | SEO técnico, dados estruturados (schema.org), sitemap autogerado, **i18n-ready por padrão** (mesmo monolíngue) + multilíngue com URL por idioma/hreflang, layout de referência, OG dinâmica | `references/seo-i18n.md` |
@@ -60,7 +83,7 @@ Mapa de references — leia o que casa com a tarefa:
 | **Limites de código (teto 750/arquivo, ~500 úteis + flag em >300 úteis), uma função/componente por arquivo, comentários, MAPA** | `references/padroes-codigo.md` |
 | Tamanho de arquivo, doc-comment, índice de componentes/hooks, Definition of Done | `references/qualidade.md` |
 | Testes "verde de verdade": unit/componente (Testing Library), e2e (Playwright), a11y (axe), regressão visual, gates no CI | `references/testes.md` |
-| Observabilidade de front: captura de erro, RUM/Web Vitals, log estruturado sem PII | `references/observabilidade.md` |
+| Observabilidade de front: captura de erro, RUM/Web Vitals, log estruturado sem PII, banner e gate de consentimento do SDK (analytics de produto: `schematize-analytics`) | `references/observabilidade.md` |
 | Filosofia, aplicação universal e a lista completa de anti-padrões (macaquices) de frontend | `references/anti-padroes.md` |
 | Versões LTS correntes (Next/Astro/React/TS/Node) e thresholds (CWV, WCAG) | `references/stack-versoes.md` |
 | Gestão de contexto em sessões longas no Claude Code (handoff, hooks) | `references/contexto-claude-code.md` |
@@ -84,7 +107,7 @@ Estes nunca são violados, nem "pra funcionar", nem "pra ir mais rápido". A lis
 - **Stack de site: só Next.js ou Astro.** Next.js para app/dinâmico e SSR; Astro para content-driven/estático. Outro framework exige ADR. **Node é 100% permitido — mas só no frontend** (o server-side do front é frontend; back de verdade é Go/Rust na skill de backend do projeto).
 - **Fluxo de ambientes e deploy pelo pipeline.** Toda mudança segue **dev local → teste local → GitHub → hml/preview → prd** (preview por PR é o "hml por mudança"); **VETADO editar direto no site/servidor deployado** (build no ar é imutável por edição manual, recebe só artefato do git com commit SHA). Deploy/rollback/config passam pelo **pipeline de CI/CD** — a interface única; nada de deploy manual ad-hoc, e a promoção hml→prd tem que ser operável pelo usuário **sem depender da IA**. Em multi-app, build/subida é **paralela** (`nproc`) e **independência é invariante** (falha no paralelo = corrigir a independência é prioridade máxima). Detalhe em `references/ops.md`.
 - **Fonte única de config/env + build/deploy destrutivo do zero + isolamento por app.** A config parte de **uma fonte única de env** (self-host: `/<app>/.env` global; host gerenciado: env vars do projeto no provedor) — nada espalhado fora dela, segredo nunca no bundle. **Todo (re)deploy é build LIMPO do zero a partir de git + env** — sem artefato/cache stale, sem editar o site já publicado — recriando um build determinístico e reprodutível, mas **preservando os dados** (CMS/banco/uploads nunca zerados por um redeploy). **Isolamento por app:** self-host = user Linux + systemd/container hardened por app (multi-app: isolamento por usuário, nunca `root`); host gerenciado = a sandbox imutável do provedor. Detalhe em `references/ops.md` (§28.3, §28.4).
-- **IAM por desenho no cliente — front de auth próprio, controle server-side.** O auth tem **front próprio, app à parte** (`<projeto>_authfront` em **`auth.<domain>`**); **VETADO** embutir login/2FA no bundle do site principal. O cliente **delega por OIDC/OAuth2.1 + PKCE** (code trocado por token no servidor, `client_secret` nunca no bundle). **Usuário nunca loga pelo ID interno** (email/telefone são identificadores verificados; **nudge de email secundário** com detecção de provedor + tooltip "i" acessível). **≥2 fatores** com 2º forte obrigatório: **seletor de método** + **passkey/WebAuthn** (`navigator.credentials`, feature-detect + fallback). **Token só em cookie `HttpOnly`+`Secure`+`SameSite`, nunca em `localStorage`.** **View de dispositivos** (remover/"sair de todos"); **sessão 7d/90d**; **botão "Sair" → revoke server-side irreversível** (não basta apagar cookie). **Nenhuma decisão de authz no cliente** (`can()`/`isAdmin` só pinta a UI) — **enforcement, validação de token e kill de sessão são server-side**. Detalhe em `references/iam.md`; audit/scaffold por `/web-iam`; backend/ReBAC/migração na skill de backend do projeto + `/eng-iam`.
+- **IAM por desenho no cliente — front de auth próprio, controle server-side.** O auth tem **front próprio, app à parte** (`<projeto>_authfront` em **`auth.<domain>`**); **VETADO** embutir login/2FA no bundle do site principal. O cliente **delega por OIDC/OAuth2.1 + PKCE** (code trocado por token no servidor, `client_secret` nunca no bundle). **Usuário nunca loga pelo ID interno** (email/telefone são identificadores verificados; **nudge de email secundário** com detecção de provedor + tooltip "i" acessível). **≥2 fatores** com 2º forte obrigatório: **seletor de método** + **passkey/WebAuthn** (`navigator.credentials`, feature-detect + fallback). **Token só em cookie `HttpOnly`+`Secure`+`SameSite`, nunca em `localStorage`.** **View de dispositivos** (remover/"sair de todos"); **sessão longa com "confiar neste dispositivo?"** (prazos: `schematize-iam → references/sessao.md`); **botão "Sair" → revoke server-side irreversível** (não basta apagar cookie). **Nenhuma decisão de authz no cliente** (`can()`/`isAdmin` só pinta a UI) — **enforcement, validação de token e kill de sessão são server-side**. Detalhe em `references/iam.md`; audit/scaffold por `/web-iam`; backend/ReBAC/migração na skill de backend do projeto + `/eng-iam`.
 
 - **Efeito externo NUNCA sai de não-produção — e `preview` NÃO é produção.** Server action / route handler / BFF que envia e-mail, SMS, push, webhook ou cobrança segue o guard da base (`schematize-engineering → references/efeitos-externos.md`): provider resolvido no servidor por ambiente, default = SINK fora de `prd`, deny-by-default, cap por execução. Específico do front: preview/branch deploy é não-prd (discrimine por `VERCEL_ENV`/`CONTEXT`, **VETADO `NODE_ENV` sozinho**), a chave de prd existe só no escopo Production, e endpoint público de envio leva rate-limit, anti-bot e destinatário fixo no servidor. Detalhe em `references/seguranca.md` (§43.8); anti-padrão na §37 (item 55).
 - <!-- herdado:engineering/orquestracao:bullet -->**Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` → `references/orquestracao.md` §9). O principal só planeja/decompõe/despacha/supervisiona/revisa; ação onerosa vira micro-tasks; principal = Claude Opus; executor mais barato que resolve: `haiku` (mecânico) / `sonnet` (código, até 2 rodadas de correção pelo mesmo subagent) → Codex `gpt-5.6-terra` → Cursor → subagent `opus` (motivo no checkpoint) → `park`; **visual direto ao Codex; imagem nunca pelo Claude (pergunta ao usuário: Codex sugerido, ou Gemini), API de imagem paga PROIBIDA**; papéis configuráveis em `agentes.toml` (aba "Agentes" do overdev). No `overdev`, cada item do checklist é executado pelo papel adequado e revisado pelo principal (diff + gate) antes do `- [x]`. **Sem frota ociosa:** agent idle com pendência executável volta ao trabalho; pendência que depende de outro agent → mata e enfileira com gatilho de dependência; terminou → mata (§9.6).<!-- /herdado -->
@@ -147,6 +170,14 @@ aponta para cá, e aqui está o que desta skill vale lá.
   sancionado é **Go, Rust, Elixir, C#, Zig e Ruby**, por fit + ADR (`references/linguagens.md`).
   Esta skill governa o **frontend**; quando precisar nomear "o backend", diga *a linguagem do rol
   escolhida no ADR do projeto* — não uma delas por default.
+- **`schematize-iam`** — o **broker** `auth.<domain>`: protocolo, fatores, sessão, ReBAC, recuperação e
+  o gate `schematize-iam → scripts/check-iam.sh`. Esta skill é o **cliente** dele (telas, cookie,
+  WebAuthn no browser, logout que chama o revoke); `references/iam.md` aponta para lá em vez de
+  recopiar a spec (`/web-iam` audita só o lado do front).
+- **`schematize-analytics`** — **analytics de produto**: evento é contrato (tracking plan), consentimento
+  com base legal e sem PII, A/B e flags. Esta skill **implementa** o banner e o **gate de consentimento do
+  SDK** (nada não-essencial carrega antes do opt-in) e a RUM técnica; o que se mede e o gate
+  `schematize-analytics → scripts/check-tracking.sh` são de lá.
 - **`schematize-seo`** — a **fronteira mais confundida do catálogo**. A `schematize-seo` é dona da
   **estratégia**: intenção de busca, keywords, topic clusters, canibalização entre os domínios da
   casa, hreflang recíproco, AIO/LLMO/GEO, medição. Esta skill é dona da **implementação**: onde o

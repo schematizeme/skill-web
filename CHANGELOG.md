@@ -3,6 +3,16 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.19.0] — 2026-10-14
+Integração com `schematize-iam` e `schematize-analytics`; testes para os scripts que não tinham.
+
+### Alterado
+- `references/iam.md` deixa de recopiar protocolo, tiers de fator, regra do 2FA baseline, recuperação e prazos de sessão: aponta para `schematize-iam → references/protocolos.md`/`fatores.md`/`sessao.md`/`recuperacao-risco.md`/`topologia.md` e para o gate `schematize-iam → scripts/check-iam.sh`; fica o que é do navegador (telas, cookie, WebAuthn no browser, logout que chama o revoke). `/web-iam` idem.
+- `references/observabilidade.md` (49.4) aponta para `schematize-analytics` (contrato de evento, base legal, gate `check-tracking.sh`) e explicita o gate de consentimento no carregamento do SDK; `SKILL.md` ganha as duas fronteiras.
+- Novos `scripts/archive-secret-scan.test.sh` e `scripts/smoke-selfcheck.test.sh` (segredos falsos montados em runtime; servidor HTTP local para o smoke); `lib.sh` isento.
+- Blocos herdados `engineering/precedencia` (variante `dominio`) e `engineering/orquestracao` inseridos onde faltavam e sincronizados (`tools/sync-herdados.mjs`).
+- Description reduzida para ≤190 caracteres (orçamento do catálogo, 45 skills).
+
 ## [1.18.0] — 2026-10-14
 O refino visual saiu da web e foi para a nova skill `schematize-design`; a web fica com o piso técnico. Motivo: `design-refino.md` misturava duas coisas de donos diferentes (gosto e direção visual de um lado, engenharia de front do outro) e já divergia da lista de recusas de "cara de IA" usada em design (por exemplo, recomendava halo radial atrás do hero, que a lista de recusas veda). Uma fonte só para o gosto evita a deriva.
 

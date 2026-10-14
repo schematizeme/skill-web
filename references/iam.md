@@ -1,4 +1,14 @@
+<!-- cross-skill: protocolos.md, fatores.md, sessao.md, topologia.md, recuperacao-risco.md, authz-rebac.md -> schematize-iam -->
 # IAM — Identidade e Autorização no cliente/front (piso inegociável)
+
+> **O broker tem dona: `schematize-iam`.** Protocolo (authorization code + PKCE, tokens, JWKS),
+> fatores e a regra do 2FA baseline, sessão e logout, ReBAC e recuperação estão em
+> `schematize-iam → references/protocolos.md`, `schematize-iam → references/fatores.md`,
+> `schematize-iam → references/sessao.md`, `schematize-iam → references/authz-rebac.md` e
+> `schematize-iam → references/recuperacao-risco.md`; a topologia (auth como app separada, fluxo por
+> tipo de cliente) em `schematize-iam → references/topologia.md`; o gate estático é
+> `schematize-iam → scripts/check-iam.sh`. **Este arquivo NÃO recopia isso**: guarda só o que é do
+> navegador e do front de auth (telas, estados, a11y, cookie, WebAuthn no browser) e aponta o resto.
 
 Recorte **frontend/cliente** do piso de IAM da casa. O padrão-mãe (agnóstico de
 linguagem, com o serviço de auth, motor ReBAC, sessão, migração) é
@@ -19,13 +29,11 @@ decisão de acesso é tomada no cliente** (checagem no React/JSX é só para pin
   TypeScript strict), servido em **`auth.<domain>`**. **VETADO** embutir telas de
   login/cadastro/2FA no bundle do site principal (`app.<domain>`, landing, dashboard).
   Comprometer o XSS do site principal **não** pode alcançar o fluxo de credencial.
-- **O site principal e todo cliente delegam por OIDC/OAuth2.1 + PKCE:** ao precisar de
-  sessão, **redireciona o browser para `auth.<domain>`** (Authorization Code + **PKCE**
-  — `code_verifier`/`code_challenge`, `state`, `nonce`), o usuário autentica lá, e o
-  callback volta com o code que o **BFF/route handler** troca por token **no servidor** —
-  o `client_secret` (quando houver) e a troca **nunca** vivem no browser.
-- **PKCE é obrigatório mesmo em SPA/public client:** sem `client_secret` no bundle, com
-  `code_verifier` gerado por **CSPRNG** (`crypto.getRandomValues`, nunca `Math.random()`).
+- **O site principal e todo cliente delegam por OIDC/OAuth 2.1 + PKCE** (fluxo e validação em
+  `schematize-iam → references/protocolos.md`): ao precisar de sessão, **redireciona o browser para
+  `auth.<domain>`**; o callback volta com o code que o **BFF/route handler** troca por token **no
+  servidor**. No front isso vira: `code_verifier` por **CSPRNG** (`crypto.getRandomValues`, nunca
+  `Math.random()`), PKCE mesmo em SPA/public client, e **nenhum `client_secret` no bundle**.
 - **O front de auth só fala com o serviço de auth** (o IdP da casa). Nenhuma chave de
   assinatura, segredo de provider (Resend/Twilio/WebAuthn RP secret) ou credencial de
   verificação aparece no bundle — tudo server-side no `<projeto>_auth_<lang>`.
@@ -74,13 +82,10 @@ forte e evita pedir código a cada ação sensível."* **Sugestão, nunca bloque
 
 ## 3. Fatores no navegador — passkey/WebAuthn, seletor de método
 
-Classificação de força (AAL — NIST 800-63B) definida no backend; a UI **expõe e escolhe**:
-
-| Tier | Fatores | UX no cliente |
-|---|---|---|
-| **Alto (phishing-resistant)** | **Passkey/WebAuthn (núcleo)**, chave FIDO2, push aprovado | `navigator.credentials`; exigido em ops sensíveis (step-up) |
-| **Médio** | TOTP (app autenticador), senha + posse | login + 2º fator |
-| **Baixo (fallback)** | **Email OTP**, **SMS/voz** | sempre disponível; **não** autoriza ação sensível sozinho |
+A classificação de força (AAL, tiers alto/médio/baixo) é definida no backend, em
+`schematize-iam → references/fatores.md`; a UI **expõe e escolhe**, não reclassifica. Em UX: passkey
+é o fator forte de primeira classe e vale em step-up; **Email OTP/SMS** são fallback sempre
+disponível e **não** autorizam ação sensível sozinhos.
 
 - **Passkey/WebAuthn no navegador é núcleo (não roadmap):**
   - Registro: o servidor devolve as `PublicKeyCredentialCreationOptions` (challenge por
@@ -96,13 +101,11 @@ Classificação de força (AAL — NIST 800-63B) definida no backend; a UI **exp
   cultural; força medida no cliente **só como dica de UX**, verificação real — argon2id +
   HIBP — **no servidor**), mas o **seletor de modos de autenticação permite marcá-la como
   opcional** e viver de passkey/OTP/app.
-- **Senha + Email OTP já é 2FA — a UI NUNCA bloqueia o login por falta de fator forte:** a
-  conta nasce em 2FA baseline (senha + código no email verificado); a tela **libera o acesso
-  baseline** e apenas **sugere** (card dispensável, §nudge) enrolar um fator forte (app/passkey)
-  e um 2º email. O fator forte é pedido **just-in-time** — quando o usuário faz algo sensível
-  (a tela dispara o **step-up**) ou quando o servidor sinaliza risco (§4) — **nunca** como muro
-  pré-login. Tratar quem tem senha+OTP como "sem 2FA" e travar a entrada é o círculo infinito
-  **VETADO**.
+- **A UI NUNCA bloqueia o login por falta de fator forte:** senha + código no email verificado já é
+  o 2FA baseline (regra completa e o "círculo infinito" vetado em `schematize-iam →
+  references/fatores.md`). A tela libera o baseline e só **sugere** (card dispensável, §nudge) um fator
+  forte e um 2º email; o fator forte é pedido **just-in-time** (step-up) ou quando o servidor sinaliza
+  risco — nunca como muro pré-login.
 - **Email OTP / SMS** entram como campos de código (6 dígitos, `inputmode="numeric"`,
   `autocomplete="one-time-code"`, colar/auto-preenchimento), com reenvio em **backoff** e
   feedback de rate-limit — sem revelar se o identificador existe.
@@ -144,17 +147,14 @@ quando o servidor aplica negação deceptiva (§backend); a tela nunca vaza "sen
   remover o **último fator forte** vira **ação com atraso cancelável** (a UI mostra a janela
   para abortar). **A UI só orquestra o pedido — quem exige e valida o fator é o servidor.**
 
-**Recuperação:** múltiplos caminhos na tela (outro email, códigos de backup offline,
-telefone). A UI **nunca** oferece reset que pule o 2º fator — recuperação é **≥ força do
-login** (2 fatores ou processo com atraso + revisão), com feedback de rate-limit.
+**Recuperação:** múltiplos caminhos na tela (outro email, códigos de backup offline, telefone); a UI
+**nunca** oferece reset que pule o 2º fator (a regra e o risco: `schematize-iam →
+references/recuperacao-risco.md`), com feedback de rate-limit.
 
-**Rampa de saída de estado travado (anti-deadlock) — a tela oferece a saída, não só a exigência:**
-> Com o 2FA baseline (senha + Email OTP) resolvido por desenho (§3), **não existe tela de
-> "falta 2FA" barrando o baseline**. Esta regra fica para **qualquer outra exigência** que a UI
-> imponha ("verifique seu email", "aprovação pendente", "enrole um fator forte para esta ação
-> sensível"): a tela **conduz à rampa**, não só informa o bloqueio — o caminho de saída entra
-> pelo **fallback always-on** (código por email no endereço que a pessoa já usa → sessão →
-> resolve ali). O gate real segue server-side; a UI constrói o degrau.
+**Rampa de saída de estado travado (anti-deadlock) — a tela oferece a saída, não só a exigência:** para
+qualquer exigência que a UI imponha ("verifique seu email", "aprovação pendente", "enrole um fator
+forte"), a tela **conduz à rampa** pelo **fallback always-on** (código por email → sessão → resolve
+ali); o gate real segue server-side.
 - **VETADO como "saída":** botão/link para uma página que **exige sessão** (quem está travado
   não tem sessão — o link "não funciona se já não houver sessão" é o próprio bug); texto do
   tipo *"peça a quem administra sua organização"* para algo que **só o dono faz** (ninguém
@@ -182,10 +182,9 @@ login** (2 fatores ou processo com atraso + revisão), com feedback de rate-limi
 - **Token em cookie `HttpOnly` + `Secure` + `SameSite`** (setado pelo servidor no
   callback). **JAMAIS** em `localStorage`/`sessionStorage`/memória global do JS — XSS lê
   tudo lá. O front **não manuseia** o access/refresh token; ele viaja no cookie.
-- **Sessão longa por padrão (fim do "15 min e é chutado"):** o access token é curto mas o
-  **refresh é silencioso** (server-side, via cookie) — para o usuário a sessão **persiste
-  7 dias**; no login a UI **pergunta "confiar neste dispositivo?"** → se sim, **90 dias**.
-  Ops sensíveis ainda disparam **step-up fresco** (§ step-up), sem enfraquecer a sessão.
+- **Sessão longa por padrão:** o refresh é silencioso e server-side (via cookie); no login a UI
+  **pergunta "confiar neste dispositivo?"** (os prazos e o refresh rotativo são de `schematize-iam →
+  references/sessao.md`). Ops sensíveis ainda disparam **step-up fresco**, sem enfraquecer a sessão.
 - **View de dispositivos/sessões (tela de conta):** lista os dispositivos ativos com
   **rótulo amigável** ("Chrome no Windows"), IP/geo aproximada e último uso; permite
   **remover um** (revoga aquela sessão) e **"sair de todos os dispositivos"**. Cada linha é

@@ -1,3 +1,4 @@
+<!-- cross-skill: consentimento-lgpd.md, plano-de-tracking.md -> schematize-analytics -->
 # Observabilidade de Frontend
 
 > Parte da skill **schematize-web**. O front também precisa ser observável — erro de cliente, performance de campo e telemetria. Sem PII, sempre. O padrão de observabilidade (logs estruturados, tracing, métricas RED/USE, SLO) é da `schematize-observability`; o §16 da base mantém os pisos.
@@ -43,6 +44,17 @@
 
 **MUST**
 - Telemetria respeita **consentimento** (banner/preferência) e `Do Not Track` quando aplicável; analytics e RUM só após consentimento onde a lei exige (a UE, p.ex.).
+
+> **Analytics de produto (comportamento, funil, A/B) tem dona: `schematize-analytics`.** O que se mede
+> é **contrato de evento** (tracking plan `objeto_acao`, dono, propriedades fechadas: `schematize-analytics →
+> references/plano-de-tracking.md`), a base legal e a minimização são de `schematize-analytics →
+> references/consentimento-lgpd.md`, e o gate de CI é `schematize-analytics → scripts/check-tracking.sh`
+> (evento fora do plano, PII em propriedade, SDK sem gate de consentimento). Aqui ficam o RUM/erro
+> técnico (49.1-49.3) e a **implementação do banner e do gate no cliente**, abaixo.
+
+**Gate no carregamento do SDK:** o SDK de analytics só inicia depois do opt-in da categoria (ou em
+modo memória, sem persistência); o estado do consentimento é versionado e a troca de versão do texto
+repete o pedido. É o item 1 abaixo, provado na aba de rede (item 10).
 
 #### A spec de consentimento (o que o banner tem de fazer)
 
