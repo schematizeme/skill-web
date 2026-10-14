@@ -16,6 +16,9 @@ Anexo de versões reverificado em 2026-10-14 e SKILL.md enxuto.
 - **Description** reduzida (~270 chars) para caber no orçamento de listagem (soma das 31 skills ≤ 8500; o Claude Code corta a listagem acima disso).
 - **CI:** actions de terceiros pinadas por SHA completo com comentário `# vX.Y.Z` (mesma major em uso; supply chain), mesmo SHA em todas as skills.
 
+### Alterado
+- `references/contexto-claude-code.md` e `scripts/check-external-effects{,.test}.sh` viram arquivos herdados da engineering (corrige o ponteiro e a convenção do archive para `<projeto>/<projeto>_archive`; a engineering é a dona do handoff).
+
 ## [1.16.2] — 2026-09-30
 O piso de orquestração passa a ser **herdado** da base em vez de copiado à mão: uma mudança na engineering não exige mais editar 38 arquivos.
 
